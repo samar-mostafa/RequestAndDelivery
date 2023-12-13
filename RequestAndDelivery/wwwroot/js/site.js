@@ -1,4 +1,35 @@
 ﻿
+$(document).ready(function () {
+    document.querySelectorAll('.nav-link').forEach((link) => {
+        if (link.href == window.location.href) {
+            link.classList.add("active")
+        }
+    });
+    $('body').delegate(('.js-model-render'), 'click', function () {
+
+        var btn = $(this);
+        var modelTitle = btn.data('title');
+        var url = btn.data('url');
+        var model = $('#Model');
+        if (btn.data('update') !== undefined) {
+            updatedRow = btn.parents('tr');
+        }
+
+        $.get({
+            url: url,
+            success: function (form) {
+                model.find('#ModelLabel').text(modelTitle);
+                model.find('.modal-body').html(form);
+                $.validator.unobtrusive.parse(model);
+                window.$('#Model').modal('show');
+            },
+            error: function () {
+                showErrorMessage();
+            }
+
+        });
+    });
+})
 
 window.addEventListener('DOMContentLoaded', event => {
 

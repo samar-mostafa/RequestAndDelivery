@@ -4,7 +4,11 @@
     ViewData["Title"] = "Requests";
 }
 
+
 <div class="container-fluid mt-5" dir="rtl" lang="ar">
+
+
+  
     <div class="row flex-nowrap">
         <div class="col py-3 container">
             <div class="alert alert-dark w-75 m-auto row mt-5" role="alert">
@@ -19,6 +23,27 @@
                 <div class="col-md-2">
                     <a id="btn" class="btn btn-primary" asp-action="Create">إضافه طلب جديد</a>
                 </div>
+            </div>
+            <div class="w-25 m-auto mt-5 row" >
+                <div class="col-md-3">
+                    <input class="form-check-input" type="radio" value="null" name="getRequests" checked>
+                    <label class="form-check-label">
+                        الكل
+                    </label>
+                </div>
+                <div class="col-md-4">
+                    <input class="form-check-input" type="radio" name="getRequests" value="true">
+                    <label class="form-check-label">
+                        تم تسليمها
+                    </label>
+                </div>
+                <div class="col-md-4">
+                    <input class="form-check-input" type="radio" name="getRequests" value="false" >
+                    <label class="form-check-label">
+                        لم يتم تسليمها
+                    </label>
+                </div>
+
             </div>
             <div class="m-5 text-center">
                 <table class="table table-striped table-hover" id="requestTable">
@@ -66,12 +91,70 @@
 </div>
 
 @section Scripts{
-   
-
+    <partial name="_ValidationScriptsPartial" />
+  
     <script>
+      
         $(document).ready(function () {
             new DataTable('#requestTable');
+
+            const radioButtons = document.querySelectorAll('input[name="getRequests"]');
+            for (const radioButton of radioButtons){
+                radioButton.addEventListener('click',function(){
+                    var val = radioButton.value
+            
+                    if(val == 'null'){
+                        location.reload(true);
+                    }
+                  else{
+
+                        $.ajax({
+                            url: "/Requests/Index/",
+                            type: 'get',
+                            data: { val: val },
+                            dataType: 'json',
+                            success: function (res) {
+                                var html = '';
+                                $.each(res, function (key, response) {
+                                    html += `
+                                                     <tr>
+                                                        <td>${response.deviceType}</td>
+                                                                <td>${response.requestDate}</td>
+                                                                <td>${response.exportNumber}</td>`
+                                    if (response.isDeliverd) { html += `<td><span style="color:green ;font-size:1.5rem"><i class="fa-solid fa-circle-check"></i></span></td>` }
+
+                                    else {
+                                        html += `<td><span style="color:red;font-size:1.5rem" > <i class="fa-solid fa-circle-xmark" > </i></span > </td>`
+                                    }
+
+                                    html += ` <td>
+                                                                    <a id="btn" href="javascript:;" class=" btn btn-outline-info js-model-render"
+                                                                           data-title="بيانات الموظف صاحب الطلب" data-url="/Requests/GetEmployeeData/${response.empNumber}">
+                                                                        <i class="fa-solid fa-user"></i>
+                                                                    </a>
+                                                                </td>
+
+                                                            </tr>`
+
+                                });
+
+                                $('#tableBody').html(html);
+                            },
+                            error: function () {
+                                //Do Something to handle error
+                            }
+                        });
+                  }
+                
+                  
+                   
+                })
+            }
+
         })
+
+
+        /**  */
     </script>
 }
 

@@ -17,6 +17,10 @@
         "css/all.min.css",
         "js/all.min.js"
       ]
+    },
+    {
+      "library": "jquery-ajax-unobtrusive@3.2.6",
+      "destination": "wwwroot/jquery-ajax-unobtrusive/"
     }
   ]
 }

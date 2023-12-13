@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
     <link href="~/lib/datatable/datatables.min.css" rel="stylesheet" />
-   @* <link href="https://cdn.datatables.net/v/dt/dt-1.13.8/datatables.min.css" rel="stylesheet">*@
+  
     <link href="~/css/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
@@ -20,9 +20,9 @@
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto my-2 my-lg-0">
-                        <li class="nav-item"><a class="nav-link" href="#about">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#services">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Requests" asp-action="Index">Requests</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Login">Login</a></li>
                       
                         
                     </ul>
@@ -35,7 +35,7 @@
             @RenderBody()
         </main>
     </div>
-
+    <partial name="_Model" />
      <!-- Footer-->
     <footer class="bg-light py-5 fixed-bottom">
         <div class="container px-4 px-lg-5"><div class="small text-center text-muted">Copyright &copy; 2023 - <span id="qlbww">qlbww</span></div></div>

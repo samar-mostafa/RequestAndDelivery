@@ -14,7 +14,7 @@
                 <form asp-action="Create" >
                     <div class="form-floating mb-4">
                         <select class="form-select " asp-for="DeviceTypeId" asp-items="@ViewBag.DeviceTypes">
-                            <option selected value="0">أختر نوع الجهاز</option>
+                            <option selected value="">أختر نوع الجهاز</option>
                         </select>
                         <span asp-validation-for="DeviceTypeId" class="text-danger"></span>
                     </div>
@@ -35,13 +35,13 @@
                     <div class="form-floating mb-4">
                         <select asp-items="@ViewBag.Branches" class="form-select" onchange="getBranchDepartments(this.value)"
                         asp-for="BranchId">
-                            <option selected value="0">أختر الفرع</option>
+                            <option selected value="">أختر الفرع</option>
                         </select>
                         <span asp-validation-for="BranchId" class="text-danger"></span>
                     </div>
                     <div class="form-floating mb-4">
                         <select class="form-select " id="Departments" asp-for="DepartmentId">
-                            <option selected value="0">أختر الاداره</option>
+                            <option selected value="">أختر الاداره</option>
                         </select>
                         <span asp-validation-for="DepartmentId" class="text-danger"></span>
                     </div>

@@ -15,9 +15,10 @@ namespace RequestAndDelivery.Controllers
         {
             this.db = db;
         }
-        public IActionResult Index()
+
+        public IActionResult Index(bool? val)
         {
-            var requests = db.Requests.Include(r=>r.DeviceType).Select(r=> new RequestViewModel
+            var requests = db.Requests.Include(r => r.DeviceType).Where(r => r.IsDeliverd == val || val==null).Select(r=> new RequestViewModel
             {
                 Id= r.Id,
                 DeviceType=r.DeviceType.Type,
@@ -26,7 +27,11 @@ namespace RequestAndDelivery.Controllers
                 RequestDate = r.RequestDate.ToShortDateString(),
                 EmpNumber=r.EmployeeId
             }).ToList();
-            return View(requests);
+
+            if(val == null)              
+                return View(requests);
+            else
+                return Json(requests);
         }
 
         public IActionResult Create()
@@ -73,6 +78,21 @@ namespace RequestAndDelivery.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+        public IActionResult GetEmployeeData(string id)
+        {
+            var emp = db.Employees
+                .Where(e => e.MobileNumber == id)
+                .Select(e => new EmployeeDataViewModel
+                {
+                    MobilePhone = e.MobileNumber,
+                    Name = e.Name,                   
+                    Branche = db.Branchs.Where(b => b.Id == e.BranchId).Select(b => b.Name).SingleOrDefault(),
+                    Department = db.Departments.Where(d => d.Id == e.DepartmentId).Select(d => d.Name).SingleOrDefault()
+                }).SingleOrDefault();
+            return PartialView("_EmployeeData", emp);
+
+        }
         public IActionResult GetBranchDepartments(int id)
         {
             var departments = db.BranchDepartments.Include(bd => bd.Department)
