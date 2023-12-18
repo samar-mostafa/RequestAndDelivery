@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using RequestAndDelivery.Data;
 using RequestAndDelivery.Data.Domain_Models;
 using RequestAndDelivery.Data.ViewModels;
+using System.Text.Json;
+using System.Linq.Dynamic.Core;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace RequestAndDelivery.Controllers
 {
@@ -16,22 +19,42 @@ namespace RequestAndDelivery.Controllers
             this.db = db;
         }
 
-        public IActionResult Index(bool? val)
+        public IActionResult Index(DataTableForm mdl)
         {
-            var requests = db.Requests.Include(r => r.DeviceType).Where(r => r.IsDeliverd == val || val==null).Select(r=> new RequestViewModel
+            var requests = db.Requests.Include(r => r.DeviceType).Where(r => r.IsDeliverd == mdl.Val || mdl.Val == null)
+                   .Select(r => new RequestViewModel
+                   {
+                       Id = r.Id,
+                       DeviceType = r.DeviceType.Type,
+                       ExportNumber = r.ExportNumber,
+                       IsDeliverd = r.IsDeliverd,
+                       RequestDate = r.RequestDate.ToShortDateString(),
+                       EmpNumber = r.EmployeeId
+                   });
+            if (mdl.Val != null)
             {
-                Id= r.Id,
-                DeviceType=r.DeviceType.Type,
-                ExportNumber=r.ExportNumber,
-                IsDeliverd=r.IsDeliverd,
-                RequestDate = r.RequestDate.ToShortDateString(),
-                EmpNumber=r.EmployeeId
-            }).ToList();
+                var pageSize = int.Parse(Request.Query["length"].FirstOrDefault());
+                var skip = int.Parse(Request.Query["start"]);
+                var searchValue = Request.Query["search[value]"];
+                //var sortingValue = Request.Query[string.Concat("columns[", Request.Query["order[0][column]"], "][name]")];
+                //var sortDirection = Request.Query["order[0][dir]"];
+                var searchValueNumber = 0;
+                var r = int.TryParse(searchValue, out searchValueNumber);
+                //requests.OrderBy(string.Concat(sortingValue, " ", sortDirection));
 
-            if(val == null)              
-                return View(requests);
+                var reqs = requests.AsEnumerable().Where(q => string.IsNullOrEmpty(searchValue) ? true :
+                    (q.DeviceType.ToLower().Contains(searchValue.ToString().ToLower()) ||
+                    q.ExportNumber.Contains(searchValue) ||
+                    q.RequestDate.Contains(searchValue)));
+                var data = reqs.Skip(skip).Take(pageSize).ToList();
+
+                var recordsTotal = requests.Count();
+                var jsonData = new { recordsFiltered = recordsTotal, recordsTotal, data};
+                return Ok(jsonData);
+            }
+
             else
-                return Json(requests);
+                return View(requests.ToList());
         }
 
         public IActionResult Create()

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RequestAndDelivery.Data.ViewModels;
 using RequestAndDelivery.Models;
 using System.Diagnostics;
 
@@ -33,6 +34,17 @@ namespace RequestAndDelivery.Controllers
         public IActionResult Login()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult Login(LoginViewModel model)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Logout()
+        {
+            return RedirectToAction(nameof(Login));
         }
     }
 }
