@@ -3,7 +3,7 @@ using Microsoft.VisualBasic;
 
 namespace RequestAndDelivery.Data.Domain_Models
 {
-    [Index(nameof(ExportNumber),IsUnique =true)]
+   
     public class Request
     {
         public int Id { get; set; }

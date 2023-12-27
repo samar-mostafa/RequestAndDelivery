@@ -1,7 +1,7 @@
 ﻿
 @model RequestFormViewModel
 
-<section class="mt-5">
+<section class="mt-5" dir="rtl" lang="ar">
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-lg-8 col-xl-6 text-center">
@@ -13,7 +13,7 @@
             <div class="col-lg-6">              
                 <form asp-action="Create" >
                     <div class="form-floating mb-4">
-                        <select class="form-select " asp-for="DeviceTypeId" asp-items="@ViewBag.DeviceTypes">
+                        <select class="form-select js-select2Single" asp-for="DeviceTypeId" asp-items="@ViewBag.DeviceTypes">
                             <option selected value="">أختر نوع الجهاز</option>
                         </select>
                         <span asp-validation-for="DeviceTypeId" class="text-danger"></span>
@@ -33,14 +33,14 @@
                         
                     </div>
                     <div class="form-floating mb-4">
-                        <select asp-items="@ViewBag.Branches" class="form-select" onchange="getBranchDepartments(this.value)"
+                        <select asp-items="@ViewBag.Branches" class="form-select js-select2Single" onchange="getBranchDepartments(this.value)"
                         asp-for="BranchId">
                             <option selected value="">أختر الفرع</option>
                         </select>
                         <span asp-validation-for="BranchId" class="text-danger"></span>
                     </div>
                     <div class="form-floating mb-4">
-                        <select class="form-select " id="Departments" asp-for="DepartmentId">
+                        <select class="form-select js-select2Single " id="Departments" asp-for="DepartmentId">
                             <option selected value="">أختر الاداره</option>
                         </select>
                         <span asp-validation-for="DepartmentId" class="text-danger"></span>
@@ -70,6 +70,7 @@
 
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
+    
     <script>
         function getBranchDepartments(id){
 

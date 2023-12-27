@@ -18,8 +18,8 @@ namespace RequestAndDelivery.Data.ViewModels
         [MinLength(11 ,ErrorMessage ="يجب ادخال 11 رقم ")]
         [MaxLength(11, ErrorMessage = "يجب ادخال 11 رقم فقط")]
         public string EmployeeId { get; set; }
-        [Required(ErrorMessage = "يجب ادخال رقم الصادر")]
-        [Remote("AllowItem",null,AdditionalFields =nameof(Id),ErrorMessage ="رقم الصادر موجود بالفعل")]
+        //[Required(ErrorMessage = "يجب ادخال رقم الصادر")]
+        //[Remote("AllowItem",null,AdditionalFields =nameof(Id),ErrorMessage ="رقم الصادر موجود بالفعل")]
         public string ExportNumber { get; set; }
         [Required(ErrorMessage = "يجب ادخال تاريخ الطلب")]
         public DateTime RequestDate { get; set; }

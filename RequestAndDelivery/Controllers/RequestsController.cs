@@ -29,8 +29,12 @@ namespace RequestAndDelivery.Controllers
                        ExportNumber = r.ExportNumber,
                        IsDeliverd = r.IsDeliverd,
                        RequestDate = r.RequestDate.ToShortDateString(),
-                       EmpNumber = r.EmployeeId
+                       EmpNumber = r.EmployeeId,
+                      
                    });
+            ViewBag.All = requests.Count();
+            ViewBag.Delivered = requests.Count(r => r.IsDeliverd);
+            ViewBag.NotDelivered = requests.Count(r =>! r.IsDeliverd);
             if (mdl.Val != null)
             {
                 var pageSize = int.Parse(Request.Query["length"].FirstOrDefault());
@@ -116,6 +120,28 @@ namespace RequestAndDelivery.Controllers
             return PartialView("_EmployeeData", emp);
 
         }
+
+        public IActionResult GetEmployeeDataForJson(string id)
+        {
+            var emp = db.Employees
+                .Where(e => e.MobileNumber == id)
+                .Select(e => new EmployeeDataViewModel
+                {                   
+                    Name = e.Name,
+                    BranchData = db.Branchs.Where(b => b.Id == e.BranchId).Select(b => new SelectListItem
+                    {
+                        Text = b.Name,
+                        Value=b.Id.ToString()
+                    }).SingleOrDefault(),
+                    DepartmentData = db.Departments.Where(d => d.Id == e.DepartmentId).Select(b => new SelectListItem
+                    {
+                        Text = b.Name,
+                        Value = b.Id.ToString()
+                    }).SingleOrDefault()
+                }).SingleOrDefault();
+            return Json(emp);
+
+        }
         public IActionResult GetBranchDepartments(int id)
         {
             var departments = db.BranchDepartments.Include(bd => bd.Department)
@@ -128,11 +154,22 @@ namespace RequestAndDelivery.Controllers
             return Json(departments);
         }
 
-        public IActionResult AllowItem(RequestFormViewModel model)
+        //public IActionResult AllowItem(RequestFormViewModel model)
+        //{
+        //    var reqest = db.Requests.SingleOrDefault(r =>r.ExportNumber == model.ExportNumber);
+        //    var allowed = reqest == null || reqest.Id == model.Id;
+        //    return Json(allowed);
+        //}
+
+        [HttpGet]
+        public IActionResult GetRequestsByFilters()
         {
-            var reqest = db.Requests.SingleOrDefault(r =>r.ExportNumber == model.ExportNumber);
-            var allowed = reqest == null || reqest.Id == model.Id;
-            return Json(allowed);
+
+            ViewBag.DeviceTypes = db.DeviceTypes.
+                Select(d => new SelectListItem { Value = d.Id.ToString(), Text = d.Type });
+            ViewBag.Branches = db.Branchs.
+                Select(b => new SelectListItem { Text = b.Name, Value = b.Id.ToString() });
+            return View();
         }
     }
 }

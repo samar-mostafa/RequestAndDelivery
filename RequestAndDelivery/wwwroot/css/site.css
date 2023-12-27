@@ -1,3 +1,69 @@
 #qlbww {
     color: #f8997f;
 }
+
+.deviceOwner{
+    display:none;
+}
+/*
+.footer{
+    position:absolute;
+    bottom:0px;
+    left:0px;
+    right:0px
+}*/
+
+.ReqsFilterH1 h1 {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 500;
+    color: #222;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: grid;
+    grid-template-columns: 1fr max-content 1fr;
+    grid-template-rows: 27px 0;
+    grid-gap: 20px;
+    align-items: center;
+}
+
+    .ReqsFilterH1 h1:after, .ReqsFilterH1 h1:before {
+        content: " ";
+        display: block;
+        border-bottom: 1px solid #f4623a;
+        border-top: 1px solid #f4623a;
+        height: 5px;
+        background-color: #f4623a;
+    }
+
+
+.ReqFilterTableH1 h1 {
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 1.5em;
+    padding-bottom: 15px;
+    position: relative;
+}
+
+    .ReqFilterTableH1 h1:before {
+        content: "";
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        height: 5px;
+        width: 55px;
+        background-color: #f4623a;
+    }
+
+    .ReqFilterTableH1 h1:after {
+        content: "";
+        position: absolute;
+        right: 0;
+        bottom: 2px;
+        height: 1px;
+        width: 95%;
+        max-width: 255px;
+        background-color: #f4623a;
+    }
+  

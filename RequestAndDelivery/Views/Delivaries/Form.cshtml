@@ -1,0 +1,211 @@
+﻿@model DelivaryFormViewModel
+
+
+
+
+
+<div class="mt-5 " lang="ar" dir="rtl">
+    <div class="container ">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-xl-6 text-center">
+                <h2 class="mt-5">تسليم جهاز</h2>
+                <hr class="divider" />
+            </div>
+        </div>
+
+        <div class="card w-50  m-auto mb-3 align-items-center">
+           @if(Model.ExportNumber != null) {
+                <h5 class="card-header mt-3">رقم الصادر: <span style="font-weight:bold">@Model.ExportNumber</span></h5>
+           }
+               
+                <div class="card-body">
+                <p class=" mb-3">نوع الجهاز : <span style="font-weight:bold">@Model.DeviceType </span></p>
+
+                <p>اسم صاحب الطلب: <span style="font-weight:bold">@Model.RequestEmployeeName</span></p>
+                <p>رقم التليفون: <span style="font-weight:bold">@Model.RequestEmployeeId</span></p>
+                     
+                   <div>
+                    <span >
+                        الفرع: <span style="font-weight:bold">@Model.RequestEmployeeBranch</span>
+                    </span>
+                    <span class="m-4">الإداره: <span style="font-weight:bold">@Model.RequestEmployeeDepartment</span></span>
+                       </div>
+                </div>
+            </div>
+              
+
+        <form asp-action="Create" class="w-75 m-auto row">
+                  <input hidden asp-for="RequestId"/>
+                    <!--Employee Name input-->
+                    <div class="form-floating mb-4">
+                        <input class="form-control" asp-for="SerialNumber" type="text" placeholder="سيريال الجهاز"/>
+                        <label>سيريال الجهاز</label>
+                        <span asp-validation-for="SerialNumber" class="text-danger"></span>
+                    </div>
+                    <!-- mobile number input-->
+                    <div class="form-floating mb-3">
+                        <input class="form-control" asp-for="Model"  type="text" placeholder="الموديل"/>
+                        <label>الموديل</label>
+                        <span asp-validation-for="Model" class="text-danger"></span>
+
+                    </div>
+<div class="empData row">
+
+                <h3 class="py-4">بيانات الموظف المستلم للجهاز:</h3>
+                <div class="form-floating mb-4 col-md-5  ">
+                    <input class="form-control " onkeyup="getEmployeeData(this)"
+                           asp-for="EmployeeDeliverToId" type="text" placeholder="رقم التليفون" />
+                    <label>رقم التليفون</label>
+                    <span asp-validation-for="EmployeeDeliverToId" class="text-danger"></span>
+
+                </div>
+                <div class="form-floating mb-4 col-md-5 ms-5">
+                    <input class="form-control empName" asp-for="EmployeeDeliverToName" type="text" placeholder=" اسم الموظف" />
+                    <label>اسم الموظف</label>
+                    <span asp-validation-for="EmployeeDeliverToName" class="text-danger"></span>
+                </div>
+                <!-- mobile number input-->
+
+                <div class="form-floating mb-4 col-md-5">
+
+                    <select asp-items="@ViewBag.Branches" class="form-select empBranch js-select2Single" onchange="getBranchDepartments(this.value,'#Departments1')"
+                            asp-for="EmployeeDeliverToBranchId">
+                        <option selected value="">أختر الفرع</option>
+                    </select>
+                    <span asp-validation-for="EmployeeDeliverToBranchId" class="text-danger"></span>
+
+                </div>
+                <div class="form-floating mb-4 col-md-5  ms-5">
+                    <select class="form-select empDepart js-select2Single" id="Departments1" asp-for="EmployeeDeliverToDepartmentId">
+                        <option selected value="">أختر الاداره</option>
+                    </select>
+                    <span asp-validation-for="EmployeeDeliverToDepartmentId" class="text-danger"></span>
+                </div>
+
+
+</div>
+
+     
+
+            <div class="w-50 m-auto mb-4">
+                <input asp-for="IsNew" class="form-check-input checkbox1" type="radio"  value="true">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        جهاز جديد..؟
+                    </label>
+
+                <input asp-for="IsNew"  class="form-check-input me-5 checkbox2" type="radio"  value="false">
+                    <label class="form-check-label" for="flexRadioDefault2">
+                        نقل مناقيل..؟
+                    </label>
+            
+               </div>
+           
+            <div class="deviceOwner row empData">
+                <h3 class="py-4">بيانات الموظف صاحب الجهاز:</h3>
+                <div class="form-floating mb-4 col-md-5  ">
+                    <input class="form-control" onkeyup="getEmployeeData(this)"
+                    asp-for="EmployeeDeliverFromId"
+                    type="text" placeholder="رقم التليفون" />
+                    <label>رقم التليفون</label>
+                    <span asp-validation-for="EmployeeDeliverFromId" class="text-danger"></span>
+
+                </div>
+                <div class="form-floating mb-4 col-md-5 ms-5">
+                    <input class="form-control empName" asp-for="EmployeeDeliverFromName" type="text" placeholder=" اسم الموظف" />
+                    <label>اسم الموظف</label>
+                    <span asp-validation-for="EmployeeDeliverFromName" class="text-danger"></span>
+                </div>
+                <!-- mobile number input-->
+               
+                <div class="form-floating mb-4 col-md-5 ">
+
+                    <select asp-items="@ViewBag.Branches" class="form-select empBranch " onchange="getBranchDepartments(this.value,'#Departments2')"
+                            asp-for="EmployeeDeliverFromBranchId">
+                        <option selected value="">أختر الفرع</option>
+                    </select>
+                    <span asp-validation-for="EmployeeDeliverFromBranchId" class="text-danger"></span>
+
+                </div>
+
+
+
+              
+
+
+                <div class="form-floating mb-4 col-md-5  ms-5">
+                    <select class="form-select empDepart " id="Departments2" asp-for="EmployeeDeliverFromDepartmentId">
+                        <option selected value="">أختر الاداره</option>
+                    </select>
+                    <span asp-validation-for="EmployeeDeliverFromDepartmentId" class="text-danger"></span>
+                </div>
+
+            </div>
+            
+                     <div class="form-floating mb-4">
+                        <input class="form-control"  type="date" placeholder="" asp-for="DelivaryDate" />
+                        <label>تاريخ التسليم</label>
+                        <span asp-validation-for="DelivaryDate" class="text-danger"></span>
+
+                    </div>
+                   
+                   <button class="btn btn-primary btn-l" type="submit">حفظ</button>
+                </form>
+        
+
+
+</div>
+</div>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+  
+   
+    <script>
+
+        $(".checkbox2").change(function () 
+            {
+            if (this.checked){
+                $('.deviceOwner').css("display", "flex");
+            }
+           
+        });
+        $(".checkbox1").change(function () {
+            if (this.checked) {
+                $('.deviceOwner').css("display", "none");
+            }
+        });
+        function getBranchDepartments(id,dep) {
+
+            $.get({
+                url: "/Requests/GetBranchDepartments/" + id,
+                success: function (data) {
+                    var html = "<option value=0 selected>أختر الاداره</option>";
+                    $.each(data, function (key, value) {
+                        html += `<option value=${value.id}>${value.name}</option>`;
+                        $(dep).html(html);
+                    })
+
+                }
+            })
+
+        }
+
+        function getEmployeeData(inp){
+           var input = $(inp);
+           var value = input.val();            
+            $.get({
+                url: "/Requests/GetEmployeeDataForJson/" +value,
+                success: function (data) {
+                    console.log(data)
+                    $(inp).closest("div.empData").find("input.empName").prop("value", data.name);
+                    var option = $('<option></option>').attr("value", data.branchData.value).text(data.branchData.text);
+                    $(inp).closest("div.empData").find(".empBranch").html(option);
+                    var option2 = $('<option></option>').attr("value", data.departmentData.value).text(data.departmentData.text);
+                    $(inp).closest("div.empData").find(".empDepart").html(option2);
+                   // $(inp).closest("div.empData").find("input.empBranch").prop("value", data.name);
+                    //$(inp).closest("div.empData").find("input[name='EmployeeDeliverToName']").prop("value", data.name);
+                    }
+            });
+        }
+
+    </script>
+}

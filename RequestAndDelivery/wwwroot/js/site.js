@@ -1,5 +1,7 @@
 ﻿
 $(document).ready(function () {
+    //select2
+    $('.js-select2Single').select2();
     document.querySelectorAll('.nav-link').forEach((link) => {
         if (link.href == window.location.href) {
             link.classList.add("active")
@@ -11,16 +13,14 @@ $(document).ready(function () {
         var modelTitle = btn.data('title');
         var url = btn.data('url');
         var model = $('#Model');
-        if (btn.data('update') !== undefined) {
-            updatedRow = btn.parents('tr');
-        }
+       
 
         $.get({
             url: url,
             success: function (form) {
                 model.find('#ModelLabel').text(modelTitle);
                 model.find('.modal-body').html(form);
-                $.validator.unobtrusive.parse(model);
+/*                $.validator.unobtrusive.parse(model);*/
                 window.$('#Model').modal('show');
             },
             error: function () {

@@ -31,7 +31,6 @@ namespace RequestAndDelivery.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -69,11 +68,7 @@ namespace RequestAndDelivery.Migrations
                     b.Property<DateTime>("DelivaryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DeviceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DeviceSerialNumber")
-                        .IsRequired()
+                    b.Property<string>("DeviceId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("RequestId")
@@ -81,7 +76,7 @@ namespace RequestAndDelivery.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DeviceSerialNumber");
+                    b.HasIndex("DeviceId");
 
                     b.HasIndex("RequestId");
 
@@ -97,7 +92,6 @@ namespace RequestAndDelivery.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -114,14 +108,12 @@ namespace RequestAndDelivery.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("EmployeeDeliverToId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsNew")
                         .HasColumnType("bit");
 
                     b.Property<string>("Model")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SerialNumber");
@@ -142,7 +134,6 @@ namespace RequestAndDelivery.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Type")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -162,7 +153,6 @@ namespace RequestAndDelivery.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MobileNumber");
@@ -186,11 +176,9 @@ namespace RequestAndDelivery.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("EmployeeId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ExportNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeliverd")
@@ -231,9 +219,7 @@ namespace RequestAndDelivery.Migrations
                 {
                     b.HasOne("RequestAndDelivery.Data.Domain_Models.Device", "Device")
                         .WithMany()
-                        .HasForeignKey("DeviceSerialNumber")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DeviceId");
 
                     b.HasOne("RequestAndDelivery.Data.Domain_Models.Request", "Request")
                         .WithMany()
@@ -254,9 +240,7 @@ namespace RequestAndDelivery.Migrations
 
                     b.HasOne("RequestAndDelivery.Data.Domain_Models.Employee", "EmployeeDeliverTo")
                         .WithMany()
-                        .HasForeignKey("EmployeeDeliverToId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EmployeeDeliverToId");
 
                     b.Navigation("EmployeeDeliverFrom");
 
@@ -292,9 +276,7 @@ namespace RequestAndDelivery.Migrations
 
                     b.HasOne("RequestAndDelivery.Data.Domain_Models.Employee", "Employee")
                         .WithMany("Requests")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EmployeeId");
 
                     b.Navigation("DeviceType");
 
@@ -303,14 +285,12 @@ namespace RequestAndDelivery.Migrations
 
             modelBuilder.Entity("RequestAndDelivery.Data.Domain_Models.Branch", b =>
                 {
-                    b.Navigation("Departments")
-                        .IsRequired();
+                    b.Navigation("Departments");
                 });
 
             modelBuilder.Entity("RequestAndDelivery.Data.Domain_Models.Department", b =>
                 {
-                    b.Navigation("Branchs")
-                        .IsRequired();
+                    b.Navigation("Branchs");
                 });
 
             modelBuilder.Entity("RequestAndDelivery.Data.Domain_Models.DeviceType", b =>
