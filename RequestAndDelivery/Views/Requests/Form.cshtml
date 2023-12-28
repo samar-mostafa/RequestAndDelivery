@@ -33,7 +33,7 @@
                         
                     </div>
                     <div class="form-floating mb-4">
-                        <select asp-items="@ViewBag.Branches" class="form-select js-select2Single" onchange="getBranchDepartments(this.value)"
+                        <select asp-items="@ViewBag.Branches" class="form-select js-select2Single" onchange="getBranchDepartments(this.value,'#Departments')"
                         asp-for="BranchId">
                             <option selected value="">أختر الفرع</option>
                         </select>
@@ -71,7 +71,7 @@
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
     
-    <script>
+  @*  <script>
         function getBranchDepartments(id){
 
             $.get({
@@ -88,5 +88,5 @@
 
         }
 
-    </script>
+    </script>*@
 }

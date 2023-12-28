@@ -173,39 +173,7 @@
                 $('.deviceOwner').css("display", "none");
             }
         });
-        function getBranchDepartments(id,dep) {
-
-            $.get({
-                url: "/Requests/GetBranchDepartments/" + id,
-                success: function (data) {
-                    var html = "<option value=0 selected>أختر الاداره</option>";
-                    $.each(data, function (key, value) {
-                        html += `<option value=${value.id}>${value.name}</option>`;
-                        $(dep).html(html);
-                    })
-
-                }
-            })
-
-        }
-
-        function getEmployeeData(inp){
-           var input = $(inp);
-           var value = input.val();            
-            $.get({
-                url: "/Requests/GetEmployeeDataForJson/" +value,
-                success: function (data) {
-                    console.log(data)
-                    $(inp).closest("div.empData").find("input.empName").prop("value", data.name);
-                    var option = $('<option></option>').attr("value", data.branchData.value).text(data.branchData.text);
-                    $(inp).closest("div.empData").find(".empBranch").html(option);
-                    var option2 = $('<option></option>').attr("value", data.departmentData.value).text(data.departmentData.text);
-                    $(inp).closest("div.empData").find(".empDepart").html(option2);
-                   // $(inp).closest("div.empData").find("input.empBranch").prop("value", data.name);
-                    //$(inp).closest("div.empData").find("input[name='EmployeeDeliverToName']").prop("value", data.name);
-                    }
-            });
-        }
+       
 
     </script>
 }

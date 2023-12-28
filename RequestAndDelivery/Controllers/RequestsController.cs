@@ -169,7 +169,54 @@ namespace RequestAndDelivery.Controllers
                 Select(d => new SelectListItem { Value = d.Id.ToString(), Text = d.Type });
             ViewBag.Branches = db.Branchs.
                 Select(b => new SelectListItem { Text = b.Name, Value = b.Id.ToString() });
+            ViewBag.Departments = db.Departments.
+               Select(b => new SelectListItem { Text = b.Name, Value = b.Id.ToString() });
             return View();
         }
-    }
+
+        [HttpPost]
+        public IActionResult GetRequestsByFilters(FilterRequestsViewModel mdl)
+        {
+            var entities = db.Requests.Include(r => r.Employee).Include(r => r.DeviceType).
+                Where(r => r.IsDeliverd == mdl.IsDeliverd &&
+            (r.DeviceTypeId == mdl.DeviceTypeId || mdl.DeviceTypeId == null) &&
+            (r.EmployeeId == mdl.EmployeeId || mdl.EmployeeId == null) &&
+            (r.RequestDate >= mdl.DateFrom || mdl.DateFrom == null) &&
+            (r.RequestDate <= mdl.DateTo || mdl.DateFrom == null) &&
+            (r.ExportNumber == mdl.ExportNumber || mdl.ExportNumber == null) &&
+            (r.Employee.Name == mdl.EmployeeName || mdl.EmployeeName == null) &&
+            (r.Employee.BranchId == mdl.BranchId || mdl.BranchId == null) &&
+            (r.Employee.DepartmentId == mdl.DepartmentId || mdl.DepartmentId == null)
+            ).Select(r => new FilteredRequestViewModel
+            {
+
+                DeviceType = r.DeviceType.Type,
+                ExportNumber = r.ExportNumber,
+                IsDeliverd = r.IsDeliverd,
+                RequestDate = r.RequestDate.ToShortDateString(),
+                EmpNumber = r.EmployeeId,
+                EmpName = r.Employee.Name,
+                Branch = db.Employees.Include(e=>e.Branch).Where(e=>e.MobileNumber==r.EmployeeId).Select(e=>e.Branch.Name).SingleOrDefault(),
+                Department = db.Employees.Include(e => e.Department).Where(e => e.MobileNumber == r.EmployeeId).Select(e => e.Department.Name).SingleOrDefault(),
+            });
+            var pageSize = int.Parse(Request.Form["length"]);
+            var skip = int.Parse(Request.Form["start"]);
+            var searchValue = Request.Form["search[value]"];
+            var sortingValue = Request.Form[string.Concat("columns[", Request.Form["order[0][column]"], "][data]")];
+            var sortDirection = Request.Form["order[0][dir]"];
+            var searchValueNumber = 0;
+            var r = int.TryParse(searchValue, out searchValueNumber);
+            entities.OrderBy(string.Concat(sortingValue, " ", sortDirection));
+
+            var reqs = entities.AsEnumerable().Where(q => string.IsNullOrEmpty(searchValue) ? true :
+                (q.DeviceType.ToLower().Contains(searchValue.ToString().ToLower()) ||
+                q.ExportNumber.Contains(searchValue) ||
+                q.RequestDate.Contains(searchValue)));
+            var data = reqs.Skip(skip).Take(pageSize).ToList();
+
+            var recordsTotal = reqs.Count();
+            var jsonData = new { recordsFiltered = recordsTotal, recordsTotal, data };
+            return Ok(jsonData);
+        }
+        }
 }
