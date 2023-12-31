@@ -108,5 +108,18 @@ namespace RequestAndDelivery.Controllers
             ViewBag.Branches = db.Branchs.Select(b => new SelectListItem { Text = b.Name, Value = b.Id.ToString() });
             return View("Form",mdl);
         }
+
+        [HttpGet]
+        public IActionResult GetDeliveriesByFilters()
+        {
+
+            ViewBag.DeviceTypes = db.DeviceTypes.
+                Select(d => new SelectListItem { Value = d.Id.ToString(), Text = d.Type });
+            ViewBag.Branches = db.Branchs.
+                Select(b => new SelectListItem { Text = b.Name, Value = b.Id.ToString() });
+            ViewBag.Departments = db.Departments.
+               Select(b => new SelectListItem { Text = b.Name, Value = b.Id.ToString() });
+            return View();
+        }
     }
 }

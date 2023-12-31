@@ -178,7 +178,7 @@ namespace RequestAndDelivery.Controllers
         public IActionResult GetRequestsByFilters(FilterRequestsViewModel mdl)
         {
             var entities = db.Requests.Include(r => r.Employee).Include(r => r.DeviceType).
-                Where(r => r.IsDeliverd == mdl.IsDeliverd &&
+                Where(r => r.IsDeliverd == Convert.ToBoolean( mdl.IsDeliverd) &&
             (r.DeviceTypeId == mdl.DeviceTypeId || mdl.DeviceTypeId == null) &&
             (r.EmployeeId == mdl.EmployeeId || mdl.EmployeeId == null) &&
             (r.RequestDate >= mdl.DateFrom || mdl.DateFrom == null) &&

@@ -11,7 +11,7 @@ namespace RequestAndDelivery.Data.ViewModels
         public int? DeviceTypeId { get; set; }
         public string EmployeeId { get; set; }
         public string EmployeeName { get; set; }
-        public bool IsDeliverd { get; set; } = false;
+        public bool IsDeliverd { get; set; } 
         public int? BranchId { get; set; }
         public int? DepartmentId { get; set; }
     }

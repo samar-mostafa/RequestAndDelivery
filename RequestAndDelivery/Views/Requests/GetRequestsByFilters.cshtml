@@ -1,4 +1,4 @@
-﻿@model FilterRequestsViewModel
+﻿@model FilterRequestsViewModel;
 @section Styles{
 
     @* <link href="~/datatables/css/datatables.bootstrap.min.css" rel="stylesheet" />*@
@@ -41,11 +41,18 @@
                        
                 
             </div>
-            <div class="custom-control custom-checkbox col-md-4 mt-4">
+                <div class="form-check col-md-4 mt-4">
+                    <input class="form-check-input"  type="checkbox" asp-for="IsDeliverd" value="false" >
+                 
+                    <label class="form-check-label" asp-for="IsDeliverd">
+                       تم التسليم
+                    </label>
+                </div>
+            @*<div class="custom-control custom-checkbox col-md-4 mt-4">
               
-                <input type="checkbox" id="IsDeliverd" class="custom-control-input w-25 h-25 mt-2"  asp-for="IsDeliverd">
+                <input type="checkbox" id="IsDeliverd" class="custom-control-input w-25 h-25 mt-2"  asp-for="IsDeliverd" >
                 <label class="custom-control-label fs-4" >تم التسليم</label>
-            </div>
+            </div>*@
             <div class="col-md-4 mb-4 offset-md-3">
                 <h5>رقم تليفون الموظف</h5>
                 <input id="EmployeeId" class="form-control fs-5" asp-for="EmployeeId" />
