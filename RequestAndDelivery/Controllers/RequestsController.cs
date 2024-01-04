@@ -188,7 +188,7 @@ namespace RequestAndDelivery.Controllers
             (r.Employee.BranchId == mdl.BranchId || mdl.BranchId == null) &&
             (r.Employee.DepartmentId == mdl.DepartmentId || mdl.DepartmentId == null)
             ).Select(r => new FilteredRequestViewModel
-            {
+            {   
 
                 DeviceType = r.DeviceType.Type,
                 ExportNumber = r.ExportNumber,
@@ -201,20 +201,16 @@ namespace RequestAndDelivery.Controllers
             });
             var pageSize = int.Parse(Request.Form["length"]);
             var skip = int.Parse(Request.Form["start"]);
-            var searchValue = Request.Form["search[value]"];
+          
             var sortingValue = Request.Form[string.Concat("columns[", Request.Form["order[0][column]"], "][data]")];
             var sortDirection = Request.Form["order[0][dir]"];
-            var searchValueNumber = 0;
-            var r = int.TryParse(searchValue, out searchValueNumber);
+           
+         
             entities.OrderBy(string.Concat(sortingValue, " ", sortDirection));
+           
+            var data = entities.Skip(skip).Take(pageSize).ToList();
 
-            var reqs = entities.AsEnumerable().Where(q => string.IsNullOrEmpty(searchValue) ? true :
-                (q.DeviceType.ToLower().Contains(searchValue.ToString().ToLower()) ||
-                q.ExportNumber.Contains(searchValue) ||
-                q.RequestDate.Contains(searchValue)));
-            var data = reqs.Skip(skip).Take(pageSize).ToList();
-
-            var recordsTotal = reqs.Count();
+            var recordsTotal = entities.Count();
             var jsonData = new { recordsFiltered = recordsTotal, recordsTotal, data };
             return Ok(jsonData);
         }

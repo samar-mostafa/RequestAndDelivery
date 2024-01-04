@@ -11,4 +11,15 @@
         public string EmpDelivarNumber { get; set; }
         public string EmpOwnerNumber { get; set; }
     }
+
+    public class FilteredDeliveriesViewModel : DelivaryViewModel
+    {
+        public string EmpDelivarName { get; set; }
+        public string BranchDelivar { get; set; }
+        public string DepartmentDelivar { get; set; }
+        public string EmpOwnerName { get; set; }
+        public string BranchOwner { get; set; }
+        public string DepartmentOwner { get; set; }
+
+    }
 }

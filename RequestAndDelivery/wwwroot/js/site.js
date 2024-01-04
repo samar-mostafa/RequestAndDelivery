@@ -1,18 +1,17 @@
-﻿function getBranchDepartments(id, dep) {
-
+﻿
+function getBranchDepartments(id, dep) {
     $.get({
         url: "/Requests/GetBranchDepartments/" + id,
         success: function (data) {
-            var html = "<option value=0 selected>أختر الاداره</option>";
+            var html = "<option value=null selected>أختر الاداره</option>";
             $.each(data, function (key, value) {
                 html += `<option value=${value.id}>${value.name}</option>`;
                 $(dep).html(html);
             })
-
         }
     })
-
 }
+
 
 function getEmployeeData(inp) {
     var input = $(inp);

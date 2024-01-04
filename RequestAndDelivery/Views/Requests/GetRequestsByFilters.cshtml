@@ -16,7 +16,8 @@
 
             <div class="col-md-4 mb-4 ">
                 <h5>أختر الفرع</h5>
-                <select id="BranchId" asp-items="@ViewBag.Branches" class="form-select js-select2Single" onchange="getBranchDepartments(this.value,'#Departments2')"
+                <select id="BranchId" asp-items="@ViewBag.Branches" class="form-select js-select2Single"
+                onchange="getBranchDepartments(this.value,'#Departments2')"
                         asp-for="BranchId">
                     <option value=null selected>أختر الفرع</option>
                 </select>
@@ -25,7 +26,8 @@
             <div class="col-md-4 mb-4">
 
                 <h5 class="fs-4">أختر الإداره</h5>
-                <select id="DepartmentId" asp-for="DepartmentId" class="form-select  js-select2Single" asp-items="@ViewBag.Departments" id="Departments2" asp-for="DepartmentId">
+                <select  asp-for="DepartmentId" class="form-select  js-select2Single"
+                asp-items="@ViewBag.Departments" id="Departments2" asp-for="DepartmentId">
                     <option value=null selected>أختر الاداره</option>
                 </select>
             </div>
@@ -41,18 +43,18 @@
                        
                 
             </div>
-                <div class="form-check col-md-4 mt-4">
-                    <input class="form-check-input"  type="checkbox" asp-for="IsDeliverd" value="false" >
-                 
-                    <label class="form-check-label" asp-for="IsDeliverd">
-                       تم التسليم
-                    </label>
+               @* <div class="row mb-5">
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" asp-for="IsDeliverd">
+                        <label class="form-check-label" asp-for="IsDeliverd"></label>
+                    </div>
+
+                </div>*@
+                <div class="form-check form-switch col-md-4 my-4">
+                    <input class="form-check-input fs-3 isDeliverdCheck" type="checkbox" role="switch" id="IsDeliverd" asp-for="IsDeliverd">
+                    <label class="form-check-label fs-5" for="IsDeliverd">تم التسليم؟</label>
                 </div>
-            @*<div class="custom-control custom-checkbox col-md-4 mt-4">
-              
-                <input type="checkbox" id="IsDeliverd" class="custom-control-input w-25 h-25 mt-2"  asp-for="IsDeliverd" >
-                <label class="custom-control-label fs-4" >تم التسليم</label>
-            </div>*@
+             
             <div class="col-md-4 mb-4 offset-md-3">
                 <h5>رقم تليفون الموظف</h5>
                 <input id="EmployeeId" class="form-control fs-5" asp-for="EmployeeId" />
@@ -93,7 +95,7 @@
                 <th class="text-center">نوع الجهاز</th>
                 <th class="text-center">تاريخ الطلب</th>
                 <th class="text-center">رقم الصادر</th>
-                <th class="text-center">تم التسليم</th>
+                <th class="text-center">حاله التسليم</th>
                 <th class="text-center">اسم الموظف</th>
                 <th class="text-center">رقم تليفون الموظف</th>
                 <th class="text-center">الفرع</th>
@@ -124,10 +126,21 @@
 
         var buttonCommon = {
             exportOptions: {
-               
+                columns: [6, 5, 4, 3, 2, 1, 0],
+                //columns: columns.reverse(),
                 format: {
+
                     body: function (data, row, column, node) {
-                        return data;
+                        
+                        if (column === 3){
+
+                            if ($('.fa-circle-check').html() === undefined)
+                                return data = "لم يتم التسليم"
+                                else
+                                return data = "تم التسليم "
+                        }
+                        else
+                        return data ;
                     }
                 }
             }
@@ -136,17 +149,18 @@
             function getFilteredRequests(){
                 var data = {
                     BranchId: document.getElementById("BranchId").value,
-                    DepartmentId: document.getElementById("DepartmentId").value,
+                    DepartmentId: document.getElementById("Departments2").value,
                     DateFrom: document.getElementById("DateFrom").value,
                     DateTo: document.getElementById("DateTo").value,
                     ExportNumber: document.getElementById("ExportNumber").value,
                     DeviceTypeId: document.getElementById("DeviceTypeId").value,
                     EmployeeName: document.getElementById("EmployeeName").value,
-                    IsDeliverd: document.getElementById("IsDeliverd").value,
+                    IsDeliverd: $('#IsDeliverd').prop('checked'),
                     EmployeeId: document.getElementById("EmployeeId").value
                 }
            
             var table =$("#requestTable").DataTable({
+                "searching": false,
                 "destroy": true,
                 "serverSide": true,
                 "filter": true,

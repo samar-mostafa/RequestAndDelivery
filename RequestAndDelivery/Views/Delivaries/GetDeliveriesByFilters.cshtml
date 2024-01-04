@@ -25,7 +25,7 @@
                 <div class="col-md-4 mb-4">
 
                     <h5 class="fs-4">أختر الإداره</h5>
-                    <select id="DepartmentId" asp-for="DepartmentId" class="form-select  js-select2Single" asp-items="@ViewBag.Departments" id="Departments2" asp-for="DepartmentId">
+                    <select asp-for="DepartmentId" class="form-select  js-select2Single" asp-items="@ViewBag.Departments" id="Departments2" asp-for="DepartmentId">
                         <option value=null selected>أختر الاداره</option>
                     </select>
                 </div>
@@ -35,14 +35,26 @@
                         <option value=null selected>أختر نوع الجهاز</option>
                     </select>
                 </div>
-                <div class="col-md-4 mb-4 offset-md-3">
+                <div class="col-md-4 mb-4 offset-md-3 ">
                     <h5>رقم الصادر</h5>
                     <input id="ExportNumber" class="form-control fs-5" asp-for="ExportNumber" />
 
 
                 </div>
+                <div class="col-md-4 mb-4  ">
+                    <h5>السيريال</h5>
+                    <input id="SerialNumber" class="form-control fs-5" asp-for="SerialNumber" />
 
-                <div class="w-50 m-auto mb-4">
+
+                </div>
+                <div class="col-md-4 mb-4 offset-md-3">
+                    <h5>الموديل</h5>
+                    <input id="Model" class="form-control fs-5" asp-for="Model" />
+
+
+                </div>
+
+                <div class="col-md-4 m-4 fs-5">
                     <input asp-for="IsNew" class="form-check-input checkbox1" type="radio" value="true">
                     <label class="form-check-label" for="flexRadioDefault1">
                         جهاز جديد..؟
@@ -87,30 +99,33 @@
             <h1 class=" mb-3">نتيجه البحث</h1>
         </div>
 
-        <table id="requestTable" class="table table-striped table-bordered dt-responsive nowrap" dir="rtl" lang="ar">
+        <table id="deliveriesTable" class="table table-striped table-bordered dt-responsive nowrap" dir="rtl" lang="ar">
 
             <thead>
                 <tr>
                     <th class="text-center">نوع الجهاز</th>
-                    <th class="text-center">تاريخ الطلب</th>
                     <th class="text-center">رقم الصادر</th>
-                    <th class="text-center">تم التسليم</th>
-                    <th class="text-center">اسم الموظف</th>
-                    <th class="text-center">رقم تليفون الموظف</th>
-                    <th class="text-center">الفرع</th>
-                    <th class="text-center">الإداره</th>
+                    <th class="text-center">السيريال</th>
+                    <th class="text-center">الموديل</th>
+                    <th class="text-center">حاله الجهاز</th>
+                    <th class="text-center">بيانات الموظف مستلم الجهاز</th>
+                    <th class="text-center">بيانات الموظف صاحب الجهاز</th>
                 </tr>
             </thead>
-            <tbody id="tBody"> </tbody>
+            <tbody id="tBody">
+            </tbody>
 
         </table>
 
     </div>
     @section Plugins{
-    <script src="~/lib/datatable/datatables.min.js"></script>
+    @*<script src="~/lib/datatable/datatables.min.js"></script>*@
+    <script src="~/lib/datatable/jquery.datatables.min.js"></script>
+    <script src="~/lib/datatable/datatables.fixedcolumns.min.js"></script>
     @*<script src="~/datatables/js/jquery.datatables.min.js"></script>
     <script src="~/datatables/js/datatables.bootstrap.min.js"></script>*@
     <script src="~/lib/datatable/datatables.buttons.min.js"></script>
+    
     <script src="~/lib/datatable/jszip.min.js"></script>
     <script src="~/lib/datatable/pdfmake.min.js"></script>
     <script src="~/lib/datatable/vfs_fonts.js"></script>
@@ -125,70 +140,93 @@
 
         var buttonCommon = {
             exportOptions: {
-
+                columns: [6,5,4,3,2,1,0],
+                    //columns: columns.reverse(),
                 format: {
+                    
                     body: function (data, row, column, node) {
-                        return data;
+
+                        return /*column === 5 ? data = `${row.empOwnerName}` :*/ data
+                    
                     }
                 }
             }
         };
+      
 
         function getFilteredRequests() {
             var data = {
                 BranchId: document.getElementById("BranchId").value,
-                DepartmentId: document.getElementById("DepartmentId").value,
+                DepartmentId: document.getElementById("Departments2").value,
                 DateFrom: document.getElementById("DateFrom").value,
                 DateTo: document.getElementById("DateTo").value,
                 ExportNumber: document.getElementById("ExportNumber").value,
+                SerialNumber: document.getElementById("SerialNumber").value,
+                Model: document.getElementById("Model").value,
                 DeviceTypeId: document.getElementById("DeviceTypeId").value,
                 EmployeeName: document.getElementById("EmployeeName").value,
-                IsDeliverd: document.getElementById("IsDeliverd").value,
+                IsNew: $("#IsNew").prop('checked'),
                 EmployeeId: document.getElementById("EmployeeId").value
             }
 
-            var table = $("#requestTable").DataTable({
+            var table = $("#deliveriesTable").DataTable({
+                "searching": false,
+                scrollCollapse: true,
+                scrollX: true,
+                scrollY: 300,
                 "destroy": true,
                 "serverSide": true,
                 "filter": true,
                 "ajax": {
                     //IP +
-                    url: "/Requests/GetRequestsByFilters",
+                    url: "/Delivaries/GetDeliveriesByFilters",
                     type: "post",
                     dataType: 'json',
                     data: data,
+
                 },
                 "columns": [
 
                     { "data": "deviceType", "name": "نوع الجهاز", "autowidth": true },
-                    { "data": "requestDate", "name": "تاريخ الطلب", "autowidth": true },
+
                     { "data": "exportNumber", "name": "رقم الصادر", "autowidth": true },
+                    { "data": "serialNumber", "name": "السيريال", "autowidth": true },
+                    { "data": "model", "name": "الموديل", "autowidth": true },
                     {
                         "render": function (data, type, row) {
-                            return row.isDeliverd ? `<span  style="color:green;font-size:1.5rem" > <i class="fa-solid fa-circle-check" > </i></span>` :
-                                `<span  style="color:red;font-size:1.5rem" > <i class="fa-solid fa-circle-xmark" > </i></span>`
+                            return row.status ? `جديد` : `نقل مناقيل`
                         }
                     },
-                    { "data": "empName", "name": "اسم الموظف", "autowidth": true },
-                    { "data": "empNumber", "name": "رقم تليفون الموظف", "autowidth": true },
-                    { "data": "branch", "name": "الفرع", "autowidth": true },
-                    { "data": "department", "name": "الإداره", "autowidth": true }
+                    {
+                        "render": function (data, type, row) {
+                            return row.empDelivarNumber == null ? `لا يوجد`:`الأسم:${row.empDelivarName} رقم التليفون:${row.empDelivarNumber} الفرع:${row.branchDelivar} الإداره:${row.departmentDelivar}`
+
+                                            
+                        }
+                    },
+                    {
+                        "render": function (data, type, row) {
+                            return row.empOwnerNumber == null ? `لايوجد` :`الاسم:${row.empOwnerName} رقم التليفون:${row.empOwnerNumber} الفرع:${row.branchOwner} الإداره:${row.departmentOwner}`
+                        }
+                    }
                 ],
-                dom: 'Bfrtip',
+                dom: 'Bfrtip',     
                 buttons: [
                     $.extend(true, {}, buttonCommon, {
                         extend: 'excel',
                         text: 'excel',
-                        title: 'Requests',
+                        title: 'الطلبات المسلمه',
                     }),
                     $.extend(true, {}, buttonCommon, {
                         extend: 'copy',
                         text: 'copy',
-                        title: 'Requests',
+                        title: 'الطلبات المسلمه',
                     }),
+
                     $.extend(true, {}, buttonCommon, {
+                        orientation: 'landscape',
                         extend: 'print',
-                        messageTop: '<h1>الطلبات</h1>',
+                        messageTop: 'الطلبات المسلمه',
                         customize: function (win) {
                             $(win.document.body).find('table').addClass('display').css('font-size', '20px');
                             $(win.document.body).find('tr:nth-child(odd) td').each(function (index) {
@@ -198,6 +236,8 @@
                         }
 
                     })
+
+                   
                 ]
             })
         }

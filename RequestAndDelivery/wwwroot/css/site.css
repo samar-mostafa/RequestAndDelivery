@@ -1,3 +1,5 @@
+
+
 #qlbww {
     color: #f8997f;
 }
@@ -66,4 +68,9 @@
         max-width: 255px;
         background-color: #f4623a;
     }
-  
+
+.isDeliverdCheck {
+    
+    margin-left: 6em !important;
+   
+}

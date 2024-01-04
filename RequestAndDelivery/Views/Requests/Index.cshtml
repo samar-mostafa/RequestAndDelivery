@@ -59,7 +59,7 @@
                             <th class="text-center">نوع الجهاز</th>
                             <th class="text-center">تاريخ الطلب</th>
                             <th class="text-center">رقم الصادر</th>
-                            <th  class="text-center">تم التسليم</th>
+                            <th  class="text-center">حاله التسليم</th>
                              <th class="text-center">رقم تليفون الموظف</th>
                             <th class="text-center">بيانات الموظف صاحب الطلب</th>
                             <th class="text-center">تنفيذ الطلب</th>
@@ -134,10 +134,18 @@
         $(document).ready(function () {
             var buttonCommon = {
                 exportOptions: {
-                    columns: [0, 1, 2, 3, 4],
+                     columns: [4,3,2,1,0],
                     format: {
+                        //      $('.fa-circle-check').html() === undefined
                         body: function (data, row, column, node) {
-                            return data;
+                            if (column === 1) {
+                                if (data.includes("fa-circle-check"))
+                                    return data = "تم التسليم"
+                                else
+                                    return data = "لم يتم التسليم "
+                            }
+                            else
+                                return data;
                         }
                     }
                 }
@@ -242,7 +250,7 @@
                                     
                                     },
                                     exportOptions: {
-                                        columns: [0, 1, 2,4]
+                                        columns: [4, 2, 1, 0]
                                    
                                 }},
                                 {
@@ -257,7 +265,7 @@
 
                                     },
                                     exportOptions: {
-                                        columns: [0, 1, 2,4]
+                                        columns: [4,2,1,0]
                                     
                                 }},
                                 {
@@ -274,7 +282,7 @@
                                     },
                                   
                                     exportOptions: {
-                                        columns: [0, 1, 2,4]
+                                        columns: [4, 2, 1, 0]
                                         
                                     },
                                     customize: function (win) {
