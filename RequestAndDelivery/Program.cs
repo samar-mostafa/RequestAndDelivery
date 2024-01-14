@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RequestAndDelivery.Data;
+using RequestAndDelivery.Mapping;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>
     (o => o.UseSqlServer(builder.Configuration.GetConnectionString("default")));
+builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(MappingProfile)));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

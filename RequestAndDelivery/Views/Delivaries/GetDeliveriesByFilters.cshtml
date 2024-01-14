@@ -55,16 +55,16 @@
                 </div>
 
                 <div class="col-md-4 m-4 fs-5">
-                    <input asp-for="IsNew" class="form-check-input checkbox1" type="radio" value="true">
+                    <input onchange="getStatusOfDevice()" class="form-check-input checkbox1" type="radio" value="true">
                     <label class="form-check-label" for="flexRadioDefault1">
                         جهاز جديد..؟
                     </label>
 
-                    <input asp-for="IsNew" class="form-check-input me-5 checkbox2" type="radio" value="false">
+                    <input onchange="getStatusOfDevice()" class="form-check-input me-5 checkbox2" type="radio" value="false">
                     <label class="form-check-label" for="flexRadioDefault2">
                         نقل مناقيل..؟
                     </label>
-
+                    <input hidden id="status" />
                 </div>
                 <div class="col-md-4 mb-4 offset-md-3">
                     <h5>رقم تليفون الموظف</h5>
@@ -88,7 +88,7 @@
                 </div>
                 <div class="col-md-5 m-auto mt-5">
                     <button type="button" onclick="resetToDefault()" class="btn btn-info fs-6 m-auto">إعاده تشغيل</button>
-                    <button type="button" onclick="getFilteredRequests()" class="btn btn-primary w-50 fs-6 ">إبحث</button>
+                    <button type="button" onclick="getFilteredDeliveries()" class="btn btn-primary w-50 fs-6 ">إبحث</button>
                 </div>
 
             </div>
@@ -104,9 +104,11 @@
             <thead>
                 <tr>
                     <th class="text-center">نوع الجهاز</th>
-                    <th class="text-center">رقم الصادر</th>
-                    <th class="text-center">السيريال</th>
                     <th class="text-center">الموديل</th>
+                      <th class="text-center">السيريال</th>
+                    <th class="text-center">رقم الصادر</th>
+                    <th class="text-center">تاريخ التسليم</th>
+                    
                     <th class="text-center">حاله الجهاز</th>
                     <th class="text-center">بيانات الموظف مستلم الجهاز</th>
                     <th class="text-center">بيانات الموظف صاحب الجهاز</th>
@@ -119,13 +121,10 @@
 
     </div>
     @section Plugins{
-    @*<script src="~/lib/datatable/datatables.min.js"></script>*@
-    <script src="~/lib/datatable/jquery.datatables.min.js"></script>
-    <script src="~/lib/datatable/datatables.fixedcolumns.min.js"></script>
+    <script src="~/lib/datatable/datatables.min.js"></script>
     @*<script src="~/datatables/js/jquery.datatables.min.js"></script>
     <script src="~/datatables/js/datatables.bootstrap.min.js"></script>*@
     <script src="~/lib/datatable/datatables.buttons.min.js"></script>
-    
     <script src="~/lib/datatable/jszip.min.js"></script>
     <script src="~/lib/datatable/pdfmake.min.js"></script>
     <script src="~/lib/datatable/vfs_fonts.js"></script>
@@ -134,83 +133,100 @@
 }
     @section Scripts{
     <script>
-        function resetToDefault() {
-            window.location.reload();
+
+        $(document).ready(function () {
+            document.getElementById("status").value = null
+        })
+
+
+
+        function getStatusOfDevice(){
+       
+            if ($('.checkbox1').prop("checked"))
+                           document.getElementById("status").value=true
+            else if ($('.checkbox2').prop("checked"))
+                             document.getElementById("status").value = false
+        
         }
+     
+            function resetToDefault() {
+                window.location.reload();
+            }
 
-        var buttonCommon = {
-            exportOptions: {
-                columns: [6,5,4,3,2,1,0],
+            var buttonCommon = {
+                exportOptions: {
+                    columns: [7,6, 5, 4, 3, 2, 1, 0],
                     //columns: columns.reverse(),
-                format: {
-                    
-                    body: function (data, row, column, node) {
+                    format: {
 
-                        return /*column === 5 ? data = `${row.empOwnerName}` :*/ data
-                    
+                        body: function (data, row, column, node) {
+
+                            return  data
+
+                        }
                     }
                 }
-            }
-        };
-      
+            };
 
-        function getFilteredRequests() {
-            var data = {
-                BranchId: document.getElementById("BranchId").value,
-                DepartmentId: document.getElementById("Departments2").value,
-                DateFrom: document.getElementById("DateFrom").value,
-                DateTo: document.getElementById("DateTo").value,
-                ExportNumber: document.getElementById("ExportNumber").value,
-                SerialNumber: document.getElementById("SerialNumber").value,
-                Model: document.getElementById("Model").value,
-                DeviceTypeId: document.getElementById("DeviceTypeId").value,
-                EmployeeName: document.getElementById("EmployeeName").value,
-                IsNew: $("#IsNew").prop('checked'),
-                EmployeeId: document.getElementById("EmployeeId").value
-            }
+
+        function getFilteredDeliveries() {
+          
+                var data = {
+                    BranchId: document.getElementById("BranchId").value,
+                    DepartmentId: document.getElementById("Departments2").value,
+                    DateFrom: document.getElementById("DateFrom").value,
+                    DateTo: document.getElementById("DateTo").value,
+                    ExportNumber: document.getElementById("ExportNumber").value,
+                    SerialNumber: document.getElementById("SerialNumber").value,
+                    Model: document.getElementById("Model").value,
+                    DeviceTypeId: document.getElementById("DeviceTypeId").value,
+                    EmployeeName: document.getElementById("EmployeeName").value,
+                    IsNew:/* $("#IsNew").prop('checked')*/ document.getElementById("status").value,
+                    EmployeeId: document.getElementById("EmployeeId").value
+                }
 
             var table = $("#deliveriesTable").DataTable({
                 "searching": false,
-                scrollCollapse: true,
-                scrollX: true,
-                scrollY: 300,
                 "destroy": true,
                 "serverSide": true,
                 "filter": true,
+                scrollX: true,
                 "ajax": {
                     //IP +
-                    url: "/Delivaries/GetDeliveriesByFilters",
+                    url: "/Delivaries/DeliveriesByFilters",
                     type: "post",
                     dataType: 'json',
-                    data: data,
-
-                },
+                    data: data
+                }
+                ,
                 "columns": [
 
-                    { "data": "deviceType", "name": "نوع الجهاز", "autowidth": true },
-
-                    { "data": "exportNumber", "name": "رقم الصادر", "autowidth": true },
-                    { "data": "serialNumber", "name": "السيريال", "autowidth": true },
-                    { "data": "model", "name": "الموديل", "autowidth": true },
+                    { "data": "type", "name": "Type", "autowidth": true },
+                    { "data": "model", "name": "Model", "autowidth": true },
+                    { "data": "serialNumber", "name": "SerialNumber", "autowidth": true },
+                    { "data": "exportNumber", "name": "ExportNumber", "autowidth": true },
+                    { "data": "delivaryDate", "name": "DelivaryDate", "autowidth": true },
                     {
                         "render": function (data, type, row) {
-                            return row.status ? `جديد` : `نقل مناقيل`
+                         
+                            return row.isNew ? `جديد` : `نقل مناقيل`
                         }
                     },
                     {
                         "render": function (data, type, row) {
-                            return row.empDelivarNumber == null ? `لا يوجد`:`الأسم:${row.empDelivarName} رقم التليفون:${row.empDelivarNumber} الفرع:${row.branchDelivar} الإداره:${row.departmentDelivar}`
+                            return row.employeeDeliverToId == null ? `لا يوجد` : `الأسم:${row.empDelivarName}-- رقم التليفون:${row.employeeDeliverToId} -- الفرع:${row.branchDelivar} -- الإداره:${row.departmentDelivar}`
 
-                                            
+
                         }
                     },
                     {
                         "render": function (data, type, row) {
-                            return row.empOwnerNumber == null ? `لايوجد` :`الاسم:${row.empOwnerName} رقم التليفون:${row.empOwnerNumber} الفرع:${row.branchOwner} الإداره:${row.departmentOwner}`
+                            return row.employeeDeliverFromId == null ? `لايوجد` : `الاسم:${row.empOwnerName} -- رقم التليفون:${row.employeeDeliverFromId} -- الفرع:${row.branchOwner} -- الإداره:${row.departmentOwner}`
                         }
                     }
-                ],
-                dom: 'Bfrtip',     
+                ]
+                ,
+                dom: 'Bfrtip',
                 buttons: [
                     $.extend(true, {}, buttonCommon, {
                         extend: 'excel',
@@ -226,7 +242,7 @@
                     $.extend(true, {}, buttonCommon, {
                         orientation: 'landscape',
                         extend: 'print',
-                        messageTop: 'الطلبات المسلمه',
+                        title: 'الطلبات المسلمه',
                         customize: function (win) {
                             $(win.document.body).find('table').addClass('display').css('font-size', '20px');
                             $(win.document.body).find('tr:nth-child(odd) td').each(function (index) {
@@ -237,11 +253,14 @@
 
                     })
 
-                   
+
                 ]
-            })
-        }
+                })
+            }
+
 
 
     </script>
         }
+
+   

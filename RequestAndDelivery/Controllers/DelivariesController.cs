@@ -1,33 +1,37 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RequestAndDelivery.Data;
 using RequestAndDelivery.Data.Domain_Models;
 using RequestAndDelivery.Data.ViewModels;
+using System.Linq.Dynamic.Core;
 
 namespace RequestAndDelivery.Controllers
 {
     public class DelivariesController : Controller
     {
         private readonly ApplicationDbContext db;
+        private readonly IMapper mapper;
 
-        public DelivariesController(ApplicationDbContext db)
+        public DelivariesController(ApplicationDbContext db,IMapper mapper)
         {
             this.db = db;
+            this.mapper = mapper;
         }
         public IActionResult Index()
         {
             var data = db.Delivaries.Include(d => d.Request).Include(d => d.Device).Select(d => new DelivaryViewModel
             {
-                DeviceType = db.DeviceTypes.Where(dt => dt.Id == d.Request.DeviceTypeId)
+                Type = db.DeviceTypes.Where(dt => dt.Id == d.Request.DeviceTypeId)
                 .Select(dt => dt.Type).SingleOrDefault(),
                 DelivaryDate = d.DelivaryDate.ToShortDateString(),
                 SerialNumber = d.Device.SerialNumber,
                 Model = d.Device.Model,
-                Status = d.Device.IsNew,
+                IsNew = d.Device.IsNew,
                 ExportNumber = d.Request.ExportNumber,
-                EmpDelivarNumber = d.Device.EmployeeDeliverToId,
-                EmpOwnerNumber = d.Device.EmployeeDeliverToId
+                EmployeeDeliverToId = d.Device.EmployeeDeliverToId
+               
             }).ToList();
             return View(data);
         }
@@ -123,53 +127,46 @@ namespace RequestAndDelivery.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult GetDeliveriesByFilters(FilterDeliveriesViewModel mdl)
+        [HttpPost] 
+        public IActionResult DeliveriesByFilters(FilterDeliveriesViewModel mdl)
         {
-            var entities = db.Delivaries.Include(d => d.Device).Include(d => d.Request).ThenInclude(r => r.Employee).
-                Where(d => (d.Request.DeviceTypeId == mdl.DeviceTypeId || mdl.DeviceTypeId == null) &&
+            var entities = db.Delivaries.Include(d => d.Device).ThenInclude(d=>d.EmployeeDeliverTo).ThenInclude(e=>  e.Branch)
+                .Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverTo).ThenInclude(e => e.Department)
+                .Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverFrom).ThenInclude(e => e.Department)
+                .Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverFrom).ThenInclude(e => e.Branch)
+                .Include(d => d.Request).ThenInclude(r => r.DeviceType)
+              
+                .Where(d => (d.Request.DeviceTypeId == mdl.DeviceTypeId || mdl.DeviceTypeId == null) &&
                 (d.Request.ExportNumber == mdl.ExportNumber || mdl.ExportNumber == null) &&
                 (d.DeviceId == mdl.SerialNumber || mdl.SerialNumber == null) &&
                 (d.Device.Model == mdl.Model || mdl.Model == null) &&
-                (d.Device.IsNew == mdl.IsNew) &&
+                (d.Device.IsNew.ToString() == mdl.IsNew || mdl.IsNew == null) &&
                 (d.DelivaryDate >= mdl.DateFrom || mdl.DateFrom == null) &&
                 (d.DelivaryDate <= mdl.DateTo || mdl.DateFrom == null) &&
                 (d.Device.EmployeeDeliverToId == mdl.EmployeeId ||
                 d.Device.EmployeeDeliverFromId == mdl.EmployeeId || mdl.EmployeeId == null) &&
                 (d.Request.Employee.BranchId == mdl.BranchId || mdl.BranchId == null) &&
                 (d.Request.Employee.DepartmentId == mdl.DepartmentId || mdl.DepartmentId == null) &&
-                (d.Request.Employee.Name == mdl.EmployeeName || mdl.EmployeeName == null)
-                ).Select(d => new FilteredDeliveriesViewModel
-                {
-                    DeviceType = db.DeviceTypes.Where(dt => dt.Id == d.Request.DeviceTypeId)
-                .Select(dt => dt.Type).SingleOrDefault(),
-                    DelivaryDate = d.DelivaryDate.ToShortDateString(),
-                    SerialNumber = d.Device.SerialNumber,
-                    Model = d.Device.Model,
-                    Status = d.Device.IsNew,
-                    ExportNumber = d.Request.ExportNumber,
-                    EmpDelivarNumber = d.Device.EmployeeDeliverToId,
-                    EmpOwnerNumber = d.Device.EmployeeDeliverFromId,
-                    BranchDelivar = db.Employees.Include(e => e.Branch).Where(e => e.MobileNumber == d.Device.EmployeeDeliverToId).Select(e => e.Branch.Name).SingleOrDefault(),
-                    DepartmentDelivar = db.Employees.Include(e => e.Department).Where(e => e.MobileNumber == d.Device.EmployeeDeliverToId).Select(e => e.Department.Name).SingleOrDefault(),
-                    BranchOwner = db.Employees.Include(e => e.Branch).Where(e => e.MobileNumber == d.Device.EmployeeDeliverFromId).Select(e => e.Branch.Name).SingleOrDefault(),
-                    DepartmentOwner = db.Employees.Include(e => e.Department).Where(e => e.MobileNumber == d.Device.EmployeeDeliverFromId).Select(e => e.Department.Name).SingleOrDefault(),
-                    EmpDelivarName = db.Employees.Where(e => e.MobileNumber == d.Device.EmployeeDeliverToId).Select(e => e.Name).SingleOrDefault(),
-                    EmpOwnerName = db.Employees.Where(e => e.MobileNumber == d.Device.EmployeeDeliverFromId).Select(e => e.Name).SingleOrDefault(),
-
-                }).ToList();
-
+                (d.Request.Employee.Name == mdl.EmployeeName || mdl.EmployeeName == null));
+                //).Select(d=>new FilteredDeliveriesViewModel
+                //{
+                //    Model=d.Device.Model,
+                //    SerialNumber=d.Device.SerialNumber,
+                //    Type=d.Request.DeviceType.Type
+                //} ).ToList();
+            var mappingData = mapper.Map<IEnumerable<FilteredDeliveriesViewModel>>(entities).AsQueryable();
+            
             var pageSize = int.Parse(Request.Form["length"]);
             var skip = int.Parse(Request.Form["start"]);
-          
-          //  var sortingValue = Request.Form[string.Concat("columns[", Request.Form["order[0][column]"], "][data]")];
-          //  var sortDirection = Request.Form["order[0][dir]"];
-           
-           
-          //// entities.OrderBy(string.Concat(sortingValue, " ", sortDirection));
 
-          
-            var data = entities.Skip(skip).Take(pageSize).ToList();
+            var sortingValue = Request.Form[string.Concat("columns[", Request.Form["order[0][column]"], "][data]")];
+            var sortDirection = Request.Form["order[0][dir]"];
+
+
+            mappingData.OrderBy(string.Concat(sortingValue, " ", sortDirection));
+
+
+            var data = mappingData.Skip(skip).Take(pageSize).ToList();
 
             var recordsTotal = entities.Count();
             var jsonData = new { recordsFiltered = recordsTotal, recordsTotal, data };

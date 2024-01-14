@@ -29,9 +29,9 @@
                     <a id="btn" class="btn btn-primary" asp-action="Create">إضافه طلب جديد</a>
                 </div>
             </div>
-            <div class="w-25 m-auto mt-5 row" >
+            <div class="w-50 fs-5 m-auto mt-5 row" >
                 <div class="col-md-3">
-                    <input class="form-check-input" type="radio" value="null" name="getRequests" checked>
+                    <input class="form-check-input" type="radio" value="null" name="getRequests" >
                     <label class="form-check-label">
                             الكل (<span style="color:red">@ViewBag.All</span>)
                     </label>
@@ -66,7 +66,7 @@
                         </tr>
                     </thead>
                     <tbody id="tableBody">
-                        @foreach (var item in Model)
+                      @*  @foreach (var item in Model)
                         {
                             <tr>
                                 <td>@item.DeviceType</td>
@@ -106,7 +106,7 @@
                                
                             </tr>
 
-                        }
+                        }*@
                     </tbody>
                 </table>
 
@@ -116,8 +116,6 @@
 </div>
 @section Plugins{
      <script src="~/lib/datatable/datatables.min.js"></script>
-    @*<script src="~/datatables/js/jquery.datatables.min.js"></script>
-    <script src="~/datatables/js/datatables.bootstrap.min.js"></script>*@
     <script src="~/lib/datatable/datatables.buttons.min.js"></script>
     <script src="~/lib/datatable/jszip.min.js"></script>
     <script src="~/lib/datatable/pdfmake.min.js"></script>
@@ -127,84 +125,48 @@
 }
 
 @section Scripts{
-   
-  
     <script>
-      
         $(document).ready(function () {
-            var buttonCommon = {
-                exportOptions: {
-                     columns: [4,3,2,1,0],
-                    format: {
-                        //      $('.fa-circle-check').html() === undefined
-                        body: function (data, row, column, node) {
-                            if (column === 1) {
-                                if (data.includes("fa-circle-check"))
-                                    return data = "تم التسليم"
+                 var buttonCommon = {
+                    exportOptions: {
+                         columns: [4,3,2,1,0],
+                        format: {
+                            //      $('.fa-circle-check').html() === undefined
+                            body: function (data, row, column, node) {
+                                if (column === 1) {
+                                    if (data.includes("fa-circle-check"))
+                                        return data = "تم التسليم"
+                                    else
+                                        return data = "لم يتم التسليم "
+                                }
                                 else
-                                    return data = "لم يتم التسليم "
+                                    return data;
                             }
-                            else
-                                return data;
                         }
                     }
-                }
-            };
-            $("#requestTable").DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                    $.extend(true, {}, buttonCommon, {
-                        extend: 'excel',
-                        text: 'excel',
-                        title: 'Requests',
-                    }),
-                    $.extend(true, {}, buttonCommon, {
-                        extend: 'copy',
-                        text: 'copy',
-                        title: 'Requests',
-                    }),
-                    $.extend(true, {}, buttonCommon, {
-                        extend: 'print',
-                        messageTop:'<h1>الطلبات</h1>',
-                        customize: function (win) {
-                            $(win.document.body).find('table').addClass('display').css('font-size', '20px');
-                            $(win.document.body).find('tr:nth-child(odd) td').each(function (index) {
-                                $(this).css('background-color', '#D0D0D0');
-                            });
-                            $(win.document.body).find('h1').css('text-align', 'center');
-                        }
-                        
-                    })
-                ]
-            })
-      
-            //function getRequests() {
-                const radioButtons = document.querySelectorAll('input[name="getRequests"]');
-                for (const radioButton of radioButtons) {
-                    radioButton.addEventListener('click', function () {
-                        var val = radioButton.value
+                };
 
-                        if (val == 'null') {
-                            location.reload(true);
-                        }
-                        else {
-
-               var table = $("#requestTable").DataTable({
-                    "destroy": true,
+                     const radioButtons = document.querySelectorAll('input[name="getRequests"]');
+                    for (const radioButton of radioButtons) {
+                             radioButton.addEventListener('click', function () {
+                               
+                    var val = radioButton.value
+                                   var table = $("#requestTable").DataTable({
+                                        "destroy": true,
                     "serverSide": true,
                     "filter": true,
                     "ajax": {
                         //IP +
-                        url: "/Requests/Index",
-                        type: "get",
-                        dataType: 'json',
-                        data: { Val: val },
+                        url: "/Requests/GetRequests",
+                        type: "POST",
+                        dataType: "json",
+                        data:{val:val}
                     },
                     "columns": [
                      
-                        { "data": "deviceType", "name": "نوع الجهاز", "autowidth": true },
-                        { "data": "requestDate", "name": "تاريخ الطلب", "autowidth": true },
-                        { "data": "exportNumber", "name": "رقم الصادر", "autowidth": true },
+                            { "data": "deviceType", "name": "DeviceType", "autowidth": true },
+                            { "data": "requestDate", "name": "RequestDate", "autowidth": true },
+                            { "data": "exportNumber", "name": "ExportNumber", "autowidth": true },
                         
                         {
                                     "render": function (data, type, row) {
@@ -212,7 +174,7 @@
                                             `<span  style="color:red;font-size:1.5rem" > <i class="fa-solid fa-circle-xmark" > </i></span>`
                                     }
                         },
-                                { "data": "empNumber", "name": "رقم تليفون الموظف", "autowidth": true },
+                            { "data": "empNumber", "name": "EmpNumber", "autowidth": true },
                                
                          {  "render": function (data, type, row) {
                                 return `<a id="btn" href="javascript:;" class=" btn btn-outline-info js-model-render"
@@ -295,103 +257,18 @@
                                 },
                                 'colvis'
                             ]
-                })
-                }
                 });
-                }
-           
-
+                
+                                   
+                                   });
+                             
+                           
+                    };
         });
-
-                  //$('#requestTable').DataTable({
-
-                    //    dom: 'Bfrtip',
-                    //    "language": {
-                    //        "url": "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Arabic.json"
-                    //    },
-                    //    buttons: [
-                    //         'excel',
-                    //        {
-                    //            extend: 'print',
-                    //            autoPrint: true,
-                    //            exportOptions: {
-                    //                columns: ':visible'
-                    //            },
-                    //            title:'Requests',
-                    //            customize: function (win) {
-                    //                $(win.document.body)
-                    //                    .css('font-size', '15pt');
-
-
-                    //                document.getElementById("#notdeliverd")
-                    //                    .html("تم ");
-                    //                console.log("hi")
-                    //                $(win.document.body).find('#notdeliverd')
-                    //                    .html("لم يتم ");
-                    //            },
-                    //        }
-                    //    ]
-                    //});
-
-
-                    //const radioButtons = document.querySelectorAll('input[name="getRequests"]');
-                    //for (const radioButton of radioButtons){
-                    //    radioButton.addEventListener('click',function(){
-                    //        var val = radioButton.value
-
-                    //        if(val == 'null'){
-                    //            location.reload(true);
-                    //        }
-                    //      else{
-
-                    //            $.ajax({
-                    //                url: "/Requests/Index/",
-                    //                type: 'get',
-                    //                data: { val: val },
-                    //                dataType: 'json',
-                    //                success: function (res) {
-                    //                    var html = '';
-                    //                    $.each(res, function (key, response) {
-                    //                        html += `
-                    //                                         <tr>
-                    //                                            <td>${response.deviceType}</td>
-                    //                                                    <td>${response.requestDate}</td>
-                    //                                                    <td>${response.exportNumber}</td>`
-                    //                        if (response.isDeliverd) { html += `<td><span style="color:green ;font-size:1.5rem"><i class="fa-solid fa-circle-check"></i></span></td>` }
-
-                    //                        else {
-                    //                            html += `<td><span style="color:red;font-size:1.5rem" > <i class="fa-solid fa-circle-xmark" > </i></span > </td>`
-                    //                        }
-
-                    //                        html += ` <td>
-                    //                                                        <a id="btn" href="javascript:;" class=" btn btn-outline-info js-model-render"
-                    //                                                               data-title="بيانات الموظف صاحب الطلب" data-url="/Requests/GetEmployeeData/${response.empNumber}">
-                    //                                                            <i class="fa-solid fa-user"></i>
-                    //                                                        </a>
-                    //                                                    </td>
-
-                    //                                                </tr>`
-
-                    //                    });
-
-                    //                    $('#tableBody').html(html);
-
-                    //                },
-                    //                error: function () {
-                    //                    //Do Something to handle error
-                    //                }
-                    //            });
-                    //      }
-
-
-
-                    //    })
-                    //}
+       
     </script>
-}
-
- 
-
+    }
+  
 
 
 

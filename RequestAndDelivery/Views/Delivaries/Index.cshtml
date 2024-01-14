@@ -47,11 +47,11 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td>@item.DeviceType</td>
+                                <td>@item.Type</td>
                                 <td>@item.ExportNumber</td>
                                 <td>@item.SerialNumber</td>
                                 <td>@item.Model</td>
-                               @if(item.Status)
+                               @if(item.IsNew)
                                    {
                                     <td>جديد</td>
                                     
@@ -62,15 +62,15 @@
                                     
                                 }
                                 <td>@item.DelivaryDate</td>
-                                <td>@item.EmpDelivarNumber</td>
+                                <td>@item.EmployeeDeliverToId</td>
 
                                 <td>
                                     <a id="btn" href="javascript:;" class=" btn btn-outline-info js-model-render"
-                                   data-title="بيانات الموظف مستلم الجهاز" data-url="/Requests/GetEmployeeData/@item.EmpDelivarNumber">
+                                   data-title="بيانات الموظف مستلم الجهاز" data-url="/Requests/GetEmployeeData/@item.EmployeeDeliverToId">
                                         <i class="fa-solid fa-user"></i>
                                     </a>
                                 </td>
-                                @if (item.Status)
+                                @if (item.IsNew)
                                 {
                                     <td>
                                         لا يوجد
@@ -81,7 +81,7 @@
                                 {
                                     <td>
                                         <a id="btn" href="javascript:;" class=" btn btn-outline-info js-model-render"
-                                   data-title="بيانات الموظف صاحب الجهاز" data-url="/Requests/GetEmployeeData/@item.EmpOwnerNumber">
+                                   data-title="بيانات الموظف صاحب الجهاز" data-url="/Requests/GetEmployeeData/@item.EmployeeDeliverFromId">
                                             <i class="fa-solid fa-user"></i>
                                         </a>
                                     </td>

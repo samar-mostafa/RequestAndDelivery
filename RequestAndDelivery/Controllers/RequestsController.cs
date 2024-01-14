@@ -7,6 +7,7 @@ using RequestAndDelivery.Data.ViewModels;
 using System.Text.Json;
 using System.Linq.Dynamic.Core;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Security.Cryptography;
 
 namespace RequestAndDelivery.Controllers
 {
@@ -19,46 +20,51 @@ namespace RequestAndDelivery.Controllers
             this.db = db;
         }
 
-        public IActionResult Index(DataTableForm mdl)
+        public IActionResult Index()
         {
-            var requests = db.Requests.Include(r => r.DeviceType).Where(r => r.IsDeliverd == mdl.Val || mdl.Val == null)
-                   .Select(r => new RequestViewModel
-                   {
+            var requests = db.Requests;
+            @ViewBag.All = requests.Count();
+            @ViewBag.Delivered=requests.Count(q=>q.IsDeliverd);
+            @ViewBag.NotDelivered= requests.Count(q => !q.IsDeliverd);
+            return View();
+        }
+
+
+        [HttpPost]
+        public IActionResult GetRequests(bool? val)
+        {
+            var requests = db.Requests.Include(r => r.DeviceType).Where(r => r.IsDeliverd == val || val == null)
+            .Select(r => new RequestViewModel
+            {
                        Id = r.Id,
                        DeviceType = r.DeviceType.Type,
                        ExportNumber = r.ExportNumber,
                        IsDeliverd = r.IsDeliverd,
                        RequestDate = r.RequestDate.ToShortDateString(),
                        EmpNumber = r.EmployeeId,
-                      
-                   });
-            ViewBag.All = requests.Count();
-            ViewBag.Delivered = requests.Count(r => r.IsDeliverd);
-            ViewBag.NotDelivered = requests.Count(r =>! r.IsDeliverd);
-            if (mdl.Val != null)
-            {
-                var pageSize = int.Parse(Request.Query["length"].FirstOrDefault());
-                var skip = int.Parse(Request.Query["start"]);
-                var searchValue = Request.Query["search[value]"];
-                //var sortingValue = Request.Query[string.Concat("columns[", Request.Query["order[0][column]"], "][name]")];
-                //var sortDirection = Request.Query["order[0][dir]"];
-                var searchValueNumber = 0;
-                var r = int.TryParse(searchValue, out searchValueNumber);
-                //requests.OrderBy(string.Concat(sortingValue, " ", sortDirection));
 
-                var reqs = requests.AsEnumerable().Where(q => string.IsNullOrEmpty(searchValue) ? true :
-                    (q.DeviceType.ToLower().Contains(searchValue.ToString().ToLower()) ||
-                    q.ExportNumber.Contains(searchValue) ||
-                    q.RequestDate.Contains(searchValue)));
-                var data = reqs.Skip(skip).Take(pageSize).ToList();
+            });
+          
+            var pageSize = int.Parse(Request.Form["length"]);
+            var skip = int.Parse(Request.Form["start"]);
+            var searchValue = Request.Form["search[value]"];
+            var sortColumnIndex= Request.Form["order[0][column]"];
+            var sortingColumn = Request.Form[$"columns[{sortColumnIndex}][name]"]; ;
+            var sortDirection = Request.Form["order[0][dir]"];
+            var searchValueNumber = 0;
+            var r = int.TryParse(searchValue, out searchValueNumber);
+            requests.OrderBy($"{sortingColumn} {sortDirection}");
 
-                var recordsTotal = requests.Count();
-                var jsonData = new { recordsFiltered = recordsTotal, recordsTotal, data};
-                return Ok(jsonData);
-            }
+            var reqs = requests.AsEnumerable().Where(q => string.IsNullOrEmpty(searchValue) ? true :
+                (q.DeviceType.ToLower().Contains(searchValue.ToString().ToLower()) ||
+               (q.ExportNumber!=null&& q.ExportNumber.Contains(searchValue.ToString()))||
+                q.RequestDate.Contains(searchValue.ToString()) ||
+                q.EmpNumber.Contains(searchValue.ToString())));
 
-            else
-                return View(requests.ToList());
+            var data = reqs.Skip(skip).Take(pageSize).ToList();
+            var recordsTotal = requests.Count();
+            var jsonData = new { recordsFiltered = recordsTotal, recordsTotal, data };
+            return Ok(jsonData);
         }
 
         public IActionResult Create()

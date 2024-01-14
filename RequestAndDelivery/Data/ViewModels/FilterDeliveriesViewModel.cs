@@ -6,7 +6,7 @@
         public string ExportNumber { get; set; }
         public string SerialNumber { get; set; }
         public string Model { get; set; }
-        public bool IsNew { get; set; }
+        public string IsNew { get; set; }
         public DateTime? DateTo { get; set; }
         public DateTime? DateFrom { get; set; }
         public string EmployeeId { get; set; }

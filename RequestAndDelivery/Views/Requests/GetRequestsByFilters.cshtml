@@ -173,19 +173,19 @@
                 },
                 "columns": [
 
-                    { "data": "deviceType", "name": "نوع الجهاز", "autowidth": true },
-                    { "data": "requestDate", "name": "تاريخ الطلب", "autowidth": true },
-                    { "data": "exportNumber", "name": "رقم الصادر", "autowidth": true },
+                    { "data": "deviceType", "name": "DeviceType", "autowidth": true },
+                    { "data": "requestDate", "name": "RequestDate", "autowidth": true },
+                    { "data": "exportNumber", "name": "ExportNumber", "autowidth": true },
                     {
                      "render": function (data, type, row) {
                             return row.isDeliverd ? `<span  style="color:green;font-size:1.5rem" > <i class="fa-solid fa-circle-check" > </i></span>` :
                                 `<span  style="color:red;font-size:1.5rem" > <i class="fa-solid fa-circle-xmark" > </i></span>`
                         }
                     },
-                    { "data": "empName", "name": "اسم الموظف", "autowidth": true },
-                    { "data": "empNumber", "name": "رقم تليفون الموظف", "autowidth": true },
-                    { "data": "branch", "name": "الفرع", "autowidth": true },
-                    { "data": "department", "name": "الإداره", "autowidth": true }
+                    { "data": "empName", "name": "EmpName", "autowidth": true },
+                    { "data": "empNumber", "name": "EmpNumber", "autowidth": true },
+                    { "data": "branch", "name": "Branch", "autowidth": true },
+                    { "data": "department", "name": "Department", "autowidth": true }
                 ],
                 dom: 'Bfrtip',
                 buttons: [
