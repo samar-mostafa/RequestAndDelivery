@@ -1,0 +1,87 @@
+﻿@model DeliverWithRequestDetails
+
+
+<div class="container mt-5 pt-5" dir="rtl">
+    <h1>تفاصيل الطلب و التسليم</h1>
+    <div class="row mt-5">
+        <div class="col-md-5 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    الطلب
+                </div>
+                <div class="card-body">
+                    <h5>رقم الصادر :  @(Model.ExportNumber ==null  ? "لايوجد" : Model.ExportNumber)</h5>
+                    <h5 >تاريخ الطلب : @Model.ReqDate</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header">
+                   الموظف صاحب الطلب
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">الاسم :@Model.ReqEmpName</h5>
+                    <h5 class="card-title">رقم التليفون :@Model.ReqEmpNumber</h5>
+                    <h5 class="card-title">الفرع :@Model.ReqEmpBranch</h5>
+                    <h5 class="card-title">الاداره :@Model.ReqEmpDepartment</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                   الجهاز
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">النوع :@Model.Type</h5>
+                    <h5 class="card-title">الموديل :@Model.Model</h5>
+                    <h5 class="card-title">السيريال :@Model.SerialNumber</h5>
+                    <h5 class="card-title">حاله الجهاز :@(Model.IsNew ? "جديد":"نقل مناقيل" )</h5>
+                    <h5 class="card-title">تاريخ التسليم :@Model.DelivaryDate</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header">
+                    الموظف مستلم الجهاز
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">الاسم :@Model.EmpDelivarName</h5>
+                    <h5 class="card-title">رقم التليفون :@Model.EmployeeDeliverToId</h5>
+                    <h5 class="card-title">الفرع :@Model.BranchDelivar</h5>
+                    <h5 class="card-title">الاداره :@Model.DepartmentDelivar</h5>
+                   
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header">
+                    الموظف صاحب الجهاز
+                </div>
+                @if (Model.EmployeeDeliverFromId == null)
+                    {
+                        <h5>الجهاز جديد</h5>
+                    }
+                else
+                {
+                    <div class="card-body">
+                        <h5 class="card-title">الاسم :@Model.EmpOwnerName</h5>
+                        <h5 class="card-title">رقم التليفون :@Model.EmployeeDeliverFromId</h5>
+                        <h5 class="card-title">الفرع :@Model.BranchOwner</h5>
+                        <h5 class="card-title">الاداره :@Model.DepartmentOwner</h5>
+                        </div>
+                }
+
+            </div>
+        </div>
+
+    </div>
+
+</div>

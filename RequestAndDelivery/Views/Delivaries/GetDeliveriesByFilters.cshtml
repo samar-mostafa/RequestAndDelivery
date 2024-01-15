@@ -186,6 +186,8 @@
                 }
 
             var table = $("#deliveriesTable").DataTable({
+                "stateSave":true,
+                "processing":true,
                 "searching": false,
                 "destroy": true,
                 "serverSide": true,

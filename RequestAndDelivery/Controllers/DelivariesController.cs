@@ -148,12 +148,7 @@ namespace RequestAndDelivery.Controllers
                 (d.Request.Employee.BranchId == mdl.BranchId || mdl.BranchId == null) &&
                 (d.Request.Employee.DepartmentId == mdl.DepartmentId || mdl.DepartmentId == null) &&
                 (d.Request.Employee.Name == mdl.EmployeeName || mdl.EmployeeName == null));
-                //).Select(d=>new FilteredDeliveriesViewModel
-                //{
-                //    Model=d.Device.Model,
-                //    SerialNumber=d.Device.SerialNumber,
-                //    Type=d.Request.DeviceType.Type
-                //} ).ToList();
+               
             var mappingData = mapper.Map<IEnumerable<FilteredDeliveriesViewModel>>(entities).AsQueryable();
             
             var pageSize = int.Parse(Request.Form["length"]);
@@ -171,6 +166,22 @@ namespace RequestAndDelivery.Controllers
             var recordsTotal = entities.Count();
             var jsonData = new { recordsFiltered = recordsTotal, recordsTotal, data };
             return Ok(jsonData);
+        }
+
+        public IActionResult DeviceDeliverDetails(int id)
+        {
+            var entity =db.Delivaries.Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverTo).ThenInclude(e => e.Branch)
+                .Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverTo).ThenInclude(e => e.Department)
+                .Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverFrom).ThenInclude(e => e.Department)
+                .Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverFrom).ThenInclude(e => e.Branch)
+                .Include(d => d.Request).ThenInclude(r => r.DeviceType)
+                .Include(d => d.Request).ThenInclude(r => r.Employee)
+                .Include(d => d.Request).ThenInclude(r => r.Employee).ThenInclude(e=>e.Branch)
+                .Include(d => d.Request).ThenInclude(r => r.Employee).ThenInclude(e => e.Department)
+                .Where(d => d.RequestId == id).SingleOrDefault();
+
+            var viewModel = mapper.Map<DeliverWithRequestDetails>(entity);
+            return View(viewModel);
         }
     }
 }

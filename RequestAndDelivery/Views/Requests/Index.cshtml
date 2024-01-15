@@ -62,7 +62,7 @@
                             <th  class="text-center">حاله التسليم</th>
                              <th class="text-center">رقم تليفون الموظف</th>
                             <th class="text-center">بيانات الموظف صاحب الطلب</th>
-                            <th class="text-center">تنفيذ الطلب</th>
+                            <th class="text-center">حاله الطلب</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
@@ -154,7 +154,9 @@
                                    var table = $("#requestTable").DataTable({
                                         "destroy": true,
                     "serverSide": true,
+                    "processing":true,
                     "filter": true,
+                    "stateSave":true,
                     "ajax": {
                         //IP +
                         url: "/Requests/GetRequests",
@@ -163,6 +165,7 @@
                         data:{val:val}
                     },
                     "columns": [
+
                      
                             { "data": "deviceType", "name": "DeviceType", "autowidth": true },
                             { "data": "requestDate", "name": "RequestDate", "autowidth": true },
@@ -186,11 +189,11 @@
                                     "render": function (data, type, row) {
                                         return row.isDeliverd ? `
 
-                                                                                            <td><a class="btn btn-secondary" href ="/Delivaries/GetDeviceDeliverInfo/${row.id}"
+                                                                                                            <td><a class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="التفاصيل" href ="/Delivaries/DeviceDeliverDetails/${row.id}"
                                             ><i class="fa-solid fa-info"></i></a></td>
                                         ` :
                                             `
-                                                             <td> <a class="btn btn-warning" href ="/Delivaries/DeviceDeliver/${row.id}"
+                                                                     <td> <a  data-toggle="tooltip" data-placement="top" title="تنفيذ الطلب" class="btn btn-warning" href ="/Delivaries/DeviceDeliver/${row.id}"
                                             ><i class="fa-solid fa-file-export"></i></a></td>
                                             `
                                     }

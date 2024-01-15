@@ -22,4 +22,14 @@
         public string DepartmentOwner { get; set; }
 
     }
-}
+
+    public class DeliverWithRequestDetails : FilteredDeliveriesViewModel
+    {
+        public string ReqDate { get; set; }
+        public string ReqEmpNumber { get; set; }
+        public string ReqEmpName { get; set; }
+        public string ReqEmpBranch { get; set; }
+        public string ReqEmpDepartment { get; set; }
+    }
+
+    }
