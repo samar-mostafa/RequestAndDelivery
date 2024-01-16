@@ -35,6 +35,18 @@ function getEmployeeData(inp) {
 
 
 $(document).ready(function () {
+    //datetimepicker
+    if ($('.js-datePicker').length > 0) {
+        $('.js-datePicker').daterangepicker({
+            singleDatePicker: true,
+            maxDate: new Date(),
+            drops: 'auto',
+            autoApply: true,
+            minYear: 2010,
+            timePicker: false
+
+        });
+    }
     //select2
     $('.js-select2Single').select2();
     document.querySelectorAll('.nav-link').forEach((link) => {

@@ -1,6 +1,8 @@
 ﻿
 @model RequestFormViewModel
-
+@section Styles{
+    <link href="~/lib/datetimepicker/daterangepicker.css" rel="stylesheet" />
+}
 <section class="mt-5" dir="rtl" lang="ar">
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
@@ -53,7 +55,7 @@
                     </div>
 
                      <div class="form-floating mb-4">
-                        <input class="form-control" id="requestDate" type="date" placeholder="" asp-for="RequestDate"/>
+                        <input class="form-control js-datePicker" id="requestDate" type="text" placeholder="" asp-for="RequestDate"/>
                         <label >تاريخ الطلب</label>
                         <span asp-validation-for="RequestDate" class="text-danger"></span>
                        
@@ -67,26 +69,11 @@
         </div>
     </div>
 </section>
-
+@section Plugins{
+    <script src="~/lib/datetimepicker/moment.min.js"></script>
+    <script src="~/lib/datetimepicker/daterangepicker.min.js"></script>
+}
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
-    
-  @*  <script>
-        function getBranchDepartments(id){
-
-            $.get({
-                url:"/Requests/GetBranchDepartments/"+id,
-                success:function(data){
-                    var html = "<option value=0 selected>أختر الاداره</option>";
-                    $.each(data,function(key ,value){
-                        html += `<option value=${value.id}>${value.name}</option>`;
-                        $('#Departments').html(html);
-                    })
-
-                }
-            })
-
-        }
-
-    </script>*@
+   
 }

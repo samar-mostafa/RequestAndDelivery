@@ -1,7 +1,9 @@
 ﻿@model DelivaryFormViewModel
 
 
-
+@section Styles{
+    <link href="~/lib/datetimepicker/daterangepicker.css" rel="stylesheet" />
+}
 
 
 <div class="mt-5 " lang="ar" dir="rtl">
@@ -142,7 +144,7 @@
             </div>
             
                      <div class="form-floating mb-4">
-                        <input class="form-control"  type="date" placeholder="" asp-for="DelivaryDate" />
+                <input class="form-control js-datePicker" type="text" placeholder="" asp-for="DelivaryDate" />
                         <label>تاريخ التسليم</label>
                         <span asp-validation-for="DelivaryDate" class="text-danger"></span>
 
@@ -155,6 +157,10 @@
 
 </div>
 </div>
+@section Plugins{
+    <script src="~/lib/datetimepicker/moment.min.js"></script>
+    <script src="~/lib/datetimepicker/daterangepicker.min.js"></script>
+}
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
   
