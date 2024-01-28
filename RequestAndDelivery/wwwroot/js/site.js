@@ -36,7 +36,7 @@ function getEmployeeData(inp) {
 
 $(document).ready(function () {
     //datetimepicker
-    if ($('.js-datePicker').length > 0) {
+    if ($('').length > 0) {
         $('.js-datePicker').daterangepicker({
             singleDatePicker: true,
             maxDate: new Date(),
@@ -44,8 +44,7 @@ $(document).ready(function () {
             autoApply: true,
             minYear: 2010,
             timePicker: false
-
-        });
+        });      
     }
     //select2
     $('.js-select2Single').select2();

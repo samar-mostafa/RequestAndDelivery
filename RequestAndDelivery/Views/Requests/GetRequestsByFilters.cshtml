@@ -178,9 +178,10 @@
                     { "data": "requestDate", "name": "RequestDate", "autowidth": true },
                     { "data": "exportNumber", "name": "ExportNumber", "autowidth": true },
                     {
+                        "name": "IsDeliverd",
                      "render": function (data, type, row) {
-                            return row.isDeliverd ? `<span  style="color:green;font-size:1.5rem" > <i class="fa-solid fa-circle-check" > </i></span>` :
-                                `<span  style="color:red;font-size:1.5rem" > <i class="fa-solid fa-circle-xmark" > </i></span>`
+                        return`<span  style= "color:${(row.isDeliverd ?'green':'red')};font-size:1.5rem" ><i class="fa-solid ${(row.isDeliverd ?'fa-circle-check':'fa-circle-xmark')}"> </i></span>`
+                               
                         }
                     },
                     { "data": "empName", "name": "EmpName", "autowidth": true },

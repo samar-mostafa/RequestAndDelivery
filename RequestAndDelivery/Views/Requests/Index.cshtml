@@ -128,6 +128,7 @@
     <script>
         $(document).ready(function () {
                  var buttonCommon = {
+                  
                     exportOptions: {
                          columns: [4,3,2,1,0],
                         format: {
@@ -173,8 +174,7 @@
                         
                         {
                                     "render": function (data, type, row) {
-                                        return row.isDeliverd ? `<span  style="color:green;font-size:1.5rem" > <i class="fa-solid fa-circle-check" > </i></span>` :
-                                            `<span  style="color:red;font-size:1.5rem" > <i class="fa-solid fa-circle-xmark" > </i></span>`
+                                      return`<span  style= "color:${(row.isDeliverd ?'green':'red')};font-size:1.5rem" ><i class="fa-solid ${(row.isDeliverd ?'fa-circle-check':'fa-circle-xmark')}"> </i></span>`
                                     }
                         },
                             { "data": "empNumber", "name": "EmpNumber", "autowidth": true },
@@ -197,7 +197,8 @@
                                             ><i class="fa-solid fa-file-export"></i></a></td>
                                             `
                                     }
-                                },
+                                }
+
                        
 
                     ],
@@ -210,8 +211,12 @@
                                        
                                         if ($('.fa-circle-check').html()=== undefined)
                                            return ' الطلبات التي لم يتم تسليمها ';
-                                           else
+                                  
+                                         else if($('.fa-circle-xmark').html() === undefined)
                                             return 'الطلبات التي تم تسليمها';
+                                    else if ($('.fa-circle-xmark').html() !== undefined && $('.fa-circle-check').html()!== undefined)
+                                        return 'جميع الطلبات';
+
                                     
                                     },
                                     exportOptions: {
@@ -233,31 +238,46 @@
                                         columns: [4,2,1,0]
                                     
                                 }},
-                                {
-                                    extend: 'print',
+                               
+                                   
+                            $.extend(true, {}, buttonCommon, {
+                                extend: 'print',
+                                messageTop: function () {
 
-                                    messageTop: function () {
-                                       
-                                       
-                                        if ($('.fa-circle-check').html()=== undefined)
-                                           return '<h1 style="text-align:center;color:red;"> الطلبات التي لم يتم تسليمها </h1>';
-                                           else
-                                            return '<h1 style="text-align:center;color:red;">الطلبات التي تم تسليمها</h1>';
-                                    
-                                    },
-                                  
-                                    exportOptions: {
-                                        columns: [4, 2, 1, 0]
-                                        
-                                    },
-                                    customize: function (win) {
-                                        $(win.document.body).find('table').addClass('display').css('font-size', '20px');
-                                        $(win.document.body).find('tr:nth-child(odd) td').each(function (index) {
-                                            $(this).css('background-color', '#D0D0D0');
-                                        });
-                                        $(win.document.body).find('h1').css('text-align', 'center');
-                                    }
+                                    if ($('.fa-circle-check').html() === undefined)
+                                        return '<h1 style="text-align:center;color:red;">الطلبات التي لم يتم تسليمها</h1>';
+
+                                    else if ($('.fa-circle-xmark').html() === undefined)
+                                        return '<h1 style="text-align:center;color:red;">الطلبات التي تم تسليمها</h1>';
+
+                                    else if ($('.fa-circle-xmark').html() !== undefined && $('.fa-circle-check').html() !== undefined)
+                                        return '<h1 style="text-align:center;color:red;">جميع الطلبات</h1>';
+
+                                    //if ($('.fa-circle-check').html()=== undefined)
+                                    //   return '<h1 style="text-align:center;color:red;"> الطلبات التي لم يتم تسليمها </h1>';
+                                    //   else
+                                    //    return '<h1 style="text-align:center;color:red;">الطلبات التي تم تسليمها</h1>';
+
                                 },
+                                customize: function (win) {
+                                    $(win.document.body).find('table').addClass('display').css('font-size', '20px');
+                                    $(win.document.body).find('tr:nth-child(odd) td').each(function (index) {
+                                        $(this).css('background-color', '#D0D0D0');
+                                    });
+                                    $(win.document.body).find('h1').css('text-align', 'center');
+                                }
+                            }),
+
+                                 
+                                    
+                                    
+                                    //exportOptions:buttonCommon,
+                                    //// {
+                                    ////    columns: [4, 2, 1, 0]
+                                        
+                                    ////},
+                                  
+                             
                                 'colvis'
                             ]
                 });

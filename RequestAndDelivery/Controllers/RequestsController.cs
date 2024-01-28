@@ -8,9 +8,11 @@ using System.Text.Json;
 using System.Linq.Dynamic.Core;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Security.Cryptography;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RequestAndDelivery.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class RequestsController : Controller
     {
         private readonly ApplicationDbContext db;
@@ -29,6 +31,8 @@ namespace RequestAndDelivery.Controllers
             return View();
         }
 
+
+      
 
         [HttpPost]
         public IActionResult GetRequests(bool? val)
@@ -87,6 +91,7 @@ namespace RequestAndDelivery.Controllers
           
             if(!db.Employees.Any(e => e.MobileNumber == model.EmployeeId))
             {
+               
                 var employee=new Employee
                 {
                     MobileNumber = model.EmployeeId,
@@ -94,7 +99,7 @@ namespace RequestAndDelivery.Controllers
                     BranchId = model.BranchId,
                     DepartmentId = model.DepartmentId
                 };
-
+              
                 db.Employees.Add(employee);
             }
 
@@ -114,14 +119,14 @@ namespace RequestAndDelivery.Controllers
 
         public IActionResult GetEmployeeData(string id)
         {
-            var emp = db.Employees
+            var emp = db.Employees.Include(e=>e.Branch).Include(e=>e.Department)
                 .Where(e => e.MobileNumber == id)
                 .Select(e => new EmployeeDataViewModel
                 {
                     MobilePhone = e.MobileNumber,
-                    Name = e.Name,                   
-                    Branche = db.Branchs.Where(b => b.Id == e.BranchId).Select(b => b.Name).SingleOrDefault(),
-                    Department = db.Departments.Where(d => d.Id == e.DepartmentId).Select(d => d.Name).SingleOrDefault()
+                    Name = e.Name,
+                    Branche = e.Branch.Name,
+                    Department =e.Department.Name
                 }).SingleOrDefault();
             return PartialView("_EmployeeData", emp);
 
@@ -137,7 +142,7 @@ namespace RequestAndDelivery.Controllers
                     BranchData = db.Branchs.Where(b => b.Id == e.BranchId).Select(b => new SelectListItem
                     {
                         Text = b.Name,
-                        Value=b.Id.ToString()
+                        Value = b.Id.ToString()
                     }).SingleOrDefault(),
                     DepartmentData = db.Departments.Where(d => d.Id == e.DepartmentId).Select(b => new SelectListItem
                     {
@@ -162,7 +167,7 @@ namespace RequestAndDelivery.Controllers
 
         //public IActionResult AllowItem(RequestFormViewModel model)
         //{
-        //    var reqest = db.Requests.SingleOrDefault(r =>r.ExportNumber == model.ExportNumber);
+        //    var reqest = db.Requests.SingleOrDefault(r => r.ExportNumber == model.ExportNumber);
         //    var allowed = reqest == null || reqest.Id == model.Id;
         //    return Json(allowed);
         //}
@@ -202,8 +207,8 @@ namespace RequestAndDelivery.Controllers
                 RequestDate = r.RequestDate.ToShortDateString(),
                 EmpNumber = r.EmployeeId,
                 EmpName = r.Employee.Name,
-                Branch = db.Employees.Include(e=>e.Branch).Where(e=>e.MobileNumber==r.EmployeeId).Select(e=>e.Branch.Name).SingleOrDefault(),
-                Department = db.Employees.Include(e => e.Department).Where(e => e.MobileNumber == r.EmployeeId).Select(e => e.Department.Name).SingleOrDefault(),
+                Branch = db.Employees.Include(bd=>bd.Branch).Where(e=>e.MobileNumber==r.EmployeeId).Select(e=>e.Branch.Name).SingleOrDefault(),
+                Department = db.Employees.Include(bd => bd.Department).Where(e => e.MobileNumber == r.EmployeeId).Select(e => e.Department.Name).SingleOrDefault(),
             });
             var pageSize = int.Parse(Request.Form["length"]);
             var skip = int.Parse(Request.Form["start"]);
@@ -220,5 +225,12 @@ namespace RequestAndDelivery.Controllers
             var jsonData = new { recordsFiltered = recordsTotal, recordsTotal, data };
             return Ok(jsonData);
         }
-        }
+
+     
+
+
+}
+
+
+   
 }

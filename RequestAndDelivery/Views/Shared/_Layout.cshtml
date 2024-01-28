@@ -22,22 +22,46 @@
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto my-2 my-lg-0">
                         <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Requests" asp-action="Index">Requests</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Delivaries" asp-action="Index">Delivaries</a></li>
                         <li class="nav-item">
                             <div class="dropdown show">
                                 <a class="nav-link" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Reports
+                                    الطلبات
+                                </a>
+
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item " asp-controller="Requests" asp-action="Index">كل الطلبات</a>
+                                    <a class="dropdown-item " asp-controller="Requests" asp-action="Create">أضافه طلب جديد</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="dropdown show">
+                                <a class="nav-link" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    الطلبات المسلمه
+                                </a>
+
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item " asp-controller="Delivaries" asp-action="Index">كل الطلبات المسلمه</a>
+                                    <a class="dropdown-item " asp-controller="Delivaries" asp-action="DeliverRequest">تسليم طلب </a>
+                                </div>
+                            </div>
+                        </li>
+                       
+                       
+                        <li class="nav-item">
+                            <div class="dropdown show">
+                                <a class="nav-link" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                التقارير
                             </a>
 
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item " asp-controller="Requests" asp-action="GetRequestsByFilters">Requests</a>
-                                    <a class="dropdown-item " asp-controller="Delivaries" asp-action="GetDeliveriesByFilters">Delivaries</a>
-                                    <a class="dropdown-item " href="#">Something else here</a>
+                                    <a class="dropdown-item " asp-controller="Requests" asp-action="GetRequestsByFilters">الطلبات</a>
+                                    <a class="dropdown-item " asp-controller="Delivaries" asp-action="GetDeliveriesByFilters">الطلبات المسلمه</a>
+                                   
                             </div>
                         </div>
                         </li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Logout">Logout</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Logout">خروج</a></li>
                        
                         
                     </ul>
@@ -46,7 +70,7 @@
         </nav>
     </header>
     <div >
-        <main role="main" >
+        <main id="main" role="main" >
             @RenderBody()
         </main>
     </div>

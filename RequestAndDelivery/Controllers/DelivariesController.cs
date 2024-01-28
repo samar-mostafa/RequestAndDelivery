@@ -6,6 +6,7 @@ using RequestAndDelivery.Data;
 using RequestAndDelivery.Data.Domain_Models;
 using RequestAndDelivery.Data.ViewModels;
 using System.Linq.Dynamic.Core;
+using System.Net;
 
 namespace RequestAndDelivery.Controllers
 {
@@ -14,7 +15,7 @@ namespace RequestAndDelivery.Controllers
         private readonly ApplicationDbContext db;
         private readonly IMapper mapper;
 
-        public DelivariesController(ApplicationDbContext db,IMapper mapper)
+        public DelivariesController(ApplicationDbContext db, IMapper mapper)
         {
             this.db = db;
             this.mapper = mapper;
@@ -30,8 +31,9 @@ namespace RequestAndDelivery.Controllers
                 Model = d.Device.Model,
                 IsNew = d.Device.IsNew,
                 ExportNumber = d.Request.ExportNumber,
-                EmployeeDeliverToId = d.Device.EmployeeDeliverToId
-               
+                EmployeeDeliverToId = d.Device.EmployeeDeliverToId,
+                EmployeeDeliverFromId = d.Device.EmployeeDeliverFromId
+
             }).ToList();
             return View(data);
         }
@@ -47,6 +49,7 @@ namespace RequestAndDelivery.Controllers
             }
             if (!db.Employees.Any(e => e.MobileNumber == mdl.EmployeeDeliverToId))
             {
+
                 var employee = new Employee
                 {
                     MobileNumber = mdl.EmployeeDeliverToId,
@@ -62,6 +65,7 @@ namespace RequestAndDelivery.Controllers
             {
                 if (!db.Employees.Any(e => e.MobileNumber == mdl.EmployeeDeliverFromId))
                 {
+
                     var employee = new Employee
                     {
                         MobileNumber = mdl.EmployeeDeliverFromId,
@@ -70,7 +74,7 @@ namespace RequestAndDelivery.Controllers
                         DepartmentId = (int)mdl.EmployeeDeliverFromDepartmentId
                     };
 
-                    db.Employees.Add(employee);
+                    //db.Employees.Add(employee);
                 }
             }
             var devic = new Device
@@ -127,15 +131,15 @@ namespace RequestAndDelivery.Controllers
             return View();
         }
 
-        [HttpPost] 
+        [HttpPost]
         public IActionResult DeliveriesByFilters(FilterDeliveriesViewModel mdl)
         {
-            var entities = db.Delivaries.Include(d => d.Device).ThenInclude(d=>d.EmployeeDeliverTo).ThenInclude(e=>  e.Branch)
+            var entities = db.Delivaries.Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverTo).ThenInclude(e => e.Branch)
                 .Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverTo).ThenInclude(e => e.Department)
                 .Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverFrom).ThenInclude(e => e.Department)
                 .Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverFrom).ThenInclude(e => e.Branch)
                 .Include(d => d.Request).ThenInclude(r => r.DeviceType)
-              
+
                 .Where(d => (d.Request.DeviceTypeId == mdl.DeviceTypeId || mdl.DeviceTypeId == null) &&
                 (d.Request.ExportNumber == mdl.ExportNumber || mdl.ExportNumber == null) &&
                 (d.DeviceId == mdl.SerialNumber || mdl.SerialNumber == null) &&
@@ -145,12 +149,16 @@ namespace RequestAndDelivery.Controllers
                 (d.DelivaryDate <= mdl.DateTo || mdl.DateFrom == null) &&
                 (d.Device.EmployeeDeliverToId == mdl.EmployeeId ||
                 d.Device.EmployeeDeliverFromId == mdl.EmployeeId || mdl.EmployeeId == null) &&
-                (d.Request.Employee.BranchId == mdl.BranchId || mdl.BranchId == null) &&
-                (d.Request.Employee.DepartmentId == mdl.DepartmentId || mdl.DepartmentId == null) &&
-                (d.Request.Employee.Name == mdl.EmployeeName || mdl.EmployeeName == null));
-               
+                (d.Device.EmployeeDeliverFrom.BranchId == mdl.BranchId ||
+                d.Device.EmployeeDeliverTo.BranchId == mdl.BranchId || mdl.BranchId == null) &&
+               (d.Device.EmployeeDeliverFrom.DepartmentId == mdl.DepartmentId ||
+                d.Device.EmployeeDeliverTo.DepartmentId == mdl.DepartmentId || mdl.DepartmentId == null));
+            //(d.Request.Employee.BranchId == mdl.BranchId || mdl.BranchId == null) &&
+            //(d.Request.Employee.DepartmentId == mdl.DepartmentId || mdl.DepartmentId == null) &&
+            //(d.Request.Employee.Name == mdl.EmployeeName || mdl.EmployeeName == null));
+
             var mappingData = mapper.Map<IEnumerable<FilteredDeliveriesViewModel>>(entities).AsQueryable();
-            
+
             var pageSize = int.Parse(Request.Form["length"]);
             var skip = int.Parse(Request.Form["start"]);
 
@@ -170,18 +178,64 @@ namespace RequestAndDelivery.Controllers
 
         public IActionResult DeviceDeliverDetails(int id)
         {
-            var entity =db.Delivaries.Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverTo).ThenInclude(e => e.Branch)
+            var entity = db.Delivaries.Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverTo).ThenInclude(e => e.Branch)
                 .Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverTo).ThenInclude(e => e.Department)
                 .Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverFrom).ThenInclude(e => e.Department)
                 .Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverFrom).ThenInclude(e => e.Branch)
                 .Include(d => d.Request).ThenInclude(r => r.DeviceType)
                 .Include(d => d.Request).ThenInclude(r => r.Employee)
-                .Include(d => d.Request).ThenInclude(r => r.Employee).ThenInclude(e=>e.Branch)
+                .Include(d => d.Request).ThenInclude(r => r.Employee).ThenInclude(e => e.Branch)
                 .Include(d => d.Request).ThenInclude(r => r.Employee).ThenInclude(e => e.Department)
                 .Where(d => d.RequestId == id).SingleOrDefault();
 
             var viewModel = mapper.Map<DeliverWithRequestDetails>(entity);
             return View(viewModel);
+        }
+
+        [HttpGet]
+        public IActionResult DeliverRequest()
+        {
+            ViewBag.DeviceTypes = db.DeviceTypes.
+               Select(d => new SelectListItem { Value = d.Id.ToString(), Text = d.Type });
+            ViewBag.Branches = db.Branchs.
+                Select(b => new SelectListItem { Text = b.Name, Value = b.Id.ToString() });
+            ViewBag.Departments = db.Departments.
+               Select(b => new SelectListItem { Text = b.Name, Value = b.Id.ToString() });
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult GetRequestToDeliver(GetRequestToDeliverViewModel mdl)
+        {
+
+
+            var entityId = db.Requests.Include(r => r.Employee).Include(r => r.DeviceType).
+            Where(r => r.IsDeliverd == false &&
+            (r.RequestDate == mdl.DateFrom || mdl.DateFrom == null) &&
+            (r.DeviceTypeId == mdl.DeviceTypeId || mdl.DeviceTypeId == null) &&
+            (r.EmployeeId == mdl.EmployeeId || mdl.EmployeeId == null) &&
+            (r.ExportNumber == mdl.ExportNumber || mdl.ExportNumber == null) &&
+            (r.Employee.Name == mdl.EmployeeName || mdl.EmployeeName == null) &&
+            (r.Employee.BranchId == mdl.BranchId || mdl.BranchId == null) &&
+            (r.Employee.DepartmentId == mdl.DepartmentId || mdl.DepartmentId == null)).
+            Select(r => r.Id).ToList();
+
+            if (entityId.Count > 1)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Content("يوجد اكتر من طلب ...يجب اختيار اكتر من فلتر لتحديد الطلب بالظبط");
+
+            }
+
+            else if (entityId.Count == 0)
+            {
+                Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return Content("لا توجد طلبات..!");
+            }
+
+            else
+                return Ok( new { id = entityId.FirstOrDefault() });
+
         }
     }
 }
