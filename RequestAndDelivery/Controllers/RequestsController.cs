@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace RequestAndDelivery.Controllers
 {
-    [Authorize(Roles ="Admin")]
+   [Authorize(Roles ="Admin")]
     public class RequestsController : Controller
     {
         private readonly ApplicationDbContext db;
