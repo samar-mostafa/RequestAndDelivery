@@ -46,5 +46,6 @@ await DefaultUsers.AddAdminUserAsync(userManager);
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Login}/{id?}");
+app.MapRazorPages();
 
 app.Run();
