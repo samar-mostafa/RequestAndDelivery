@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace RequestAndDelivery.Controllers
 {
-   [Authorize]
+   [Authorize(Roles ="Admin")]
     public class RequestsController : Controller
     {
         private readonly ApplicationDbContext db;
@@ -200,7 +200,6 @@ namespace RequestAndDelivery.Controllers
             (r.Employee.DepartmentId == mdl.DepartmentId || mdl.DepartmentId == null)
             ).Select(r => new FilteredRequestViewModel
             {   
-
                 DeviceType = r.DeviceType.Type,
                 ExportNumber = r.ExportNumber,
                 IsDeliverd = r.IsDeliverd,

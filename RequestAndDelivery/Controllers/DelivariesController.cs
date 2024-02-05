@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using System.Net;
 
 namespace RequestAndDelivery.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class DelivariesController : Controller
     {
         private readonly ApplicationDbContext db;

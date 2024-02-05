@@ -9,15 +9,15 @@ namespace RequestAndDelivery.Seeds
         {
             var admin = new ApplicationUser
             {
-                FullName = "Admin",
-                UserName = "Admin",
+                FullName = "karam",
+                UserName = "karam",
                 Email = "Admin@ReqDeliv.com",
                 EmailConfirmed = true
             };
-            var user = await _userManager.FindByEmailAsync(admin.Email);
+            var user = await _userManager.FindByEmailAsync(admin.UserName);
             if(user == null)
             {
-                await _userManager.CreateAsync(admin, "P@ssword123");
+                await _userManager.CreateAsync(admin, "P@ssw0rd");
                 await _userManager.AddToRoleAsync(admin, "Admin");
             }
         }
