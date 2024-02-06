@@ -19,8 +19,8 @@
             <div class="alert alert-dark w-75 m-auto row mt-5" role="alert">
 
                 <div class="col-md-4 fs-2 offset-md-6">
-                   
-                        <i class="fa-solid fa-person-circle-question"></i>
+                  
+                     <i class="fa-solid fa-person-circle-question"></i> 
                  
                     <span> الطلبات</span>
 
@@ -204,41 +204,34 @@
                     ],
                             dom: 'Bfrtip',
                             buttons: [
-                                {
+                                $.extend(true, {}, buttonCommon, {
                                     extend: 'excel',
-                                   messageTop: function () {
-                                       
-                                       
-                                        if ($('.fa-circle-check').html()=== undefined)
-                                           return ' الطلبات التي لم يتم تسليمها ';
-                                  
-                                         else if($('.fa-circle-xmark').html() === undefined)
-                                            return 'الطلبات التي تم تسليمها';
-                                    else if ($('.fa-circle-xmark').html() !== undefined && $('.fa-circle-check').html()!== undefined)
-                                        return 'جميع الطلبات';
-
-                                    
-                                    },
-                                    exportOptions: {
-                                        columns: [4, 2, 1, 0]
-                                   
-                                }},
-                                {
-                                    extend: 'copy',              
                                     messageTop: function () {
 
-
                                         if ($('.fa-circle-check').html() === undefined)
-                                            return ' الطلبات التي لم يتم تسليمها';
-                                        else
+                                            return 'الطلبات التي لم يتم تسليمها';
+
+                                        else if ($('.fa-circle-xmark').html() === undefined)
                                             return 'الطلبات التي تم تسليمها';
 
-                                    },
-                                    exportOptions: {
-                                        columns: [4,2,1,0]
-                                    
-                                }},
-                               
+                                        else if ($('.fa-circle-xmark').html() !== undefined && $('.fa-circle-check').html() !== undefined)
+                                            return 'جميع الطلبات';
+                                    }
+                                }),
+                                $.extend(true, {}, buttonCommon, {
+                                    extend: 'copy',
+                                    messageTop: function () {
+
+                                        if ($('.fa-circle-check').html() === undefined)
+                                            return 'الطلبات التي لم يتم تسليمها';
+
+                                        else if ($('.fa-circle-xmark').html() === undefined)
+                                            return 'الطلبات التي تم تسليمها';
+
+                                        else if ($('.fa-circle-xmark').html() !== undefined && $('.fa-circle-check').html() !== undefined)
+                                            return 'جميع الطلبات';
+                                    }
+                                }),
                                    
                             $.extend(true, {}, buttonCommon, {
                                 extend: 'print',
@@ -253,10 +246,7 @@
                                     else if ($('.fa-circle-xmark').html() !== undefined && $('.fa-circle-check').html() !== undefined)
                                         return '<h1 style="text-align:center;color:red;">جميع الطلبات</h1>';
 
-                                    //if ($('.fa-circle-check').html()=== undefined)
-                                    //   return '<h1 style="text-align:center;color:red;"> الطلبات التي لم يتم تسليمها </h1>';
-                                    //   else
-                                    //    return '<h1 style="text-align:center;color:red;">الطلبات التي تم تسليمها</h1>';
+                                   
 
                                 },
                                 customize: function (win) {
