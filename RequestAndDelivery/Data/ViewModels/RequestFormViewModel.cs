@@ -15,13 +15,14 @@ namespace RequestAndDelivery.Data.ViewModels
         [Required(ErrorMessage = "يجب ادخال اسم الموظف")]
         public string EmployeeName { get; set; }
         [Required(ErrorMessage = "يجب ادخال رقم تليفون الموظف")]
-        [MinLength(11 ,ErrorMessage ="يجب ادخال 11 رقم ")]
-        [MaxLength(11, ErrorMessage = "يجب ادخال 11 رقم فقط")]
+        [RegularExpression("^01[0,1,2,5]{1}[0-9]{8}$",ErrorMessage ="رقم التليفون غير صحيح")]
         public string EmployeeId { get; set; }
         //[Required(ErrorMessage = "يجب ادخال رقم الصادر")]
         //[Remote("AllowItem",null,AdditionalFields =nameof(Id),ErrorMessage ="رقم الصادر موجود بالفعل")]
         public string ExportNumber { get; set; }
         [Required(ErrorMessage = "يجب ادخال تاريخ الطلب")]
         public DateTime RequestDate { get; set; }
+
+        public string? Note { get; set; }
     }
 }

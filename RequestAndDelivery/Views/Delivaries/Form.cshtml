@@ -3,6 +3,7 @@
 
 @section Styles{
     <link href="~/lib/datetimepicker/daterangepicker.css" rel="stylesheet" />
+    <link href="~/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
 }
 
 
@@ -37,6 +38,7 @@
               
 
         <form asp-action="Create" class="w-75 m-auto row">
+       
                   <input hidden asp-for="RequestId"/>
                     <!--Employee Name input-->
                     <div class="form-floating mb-4">
@@ -86,6 +88,10 @@
 
 
 </div>
+            <div class="form-floating mb-4">
+                <textarea class="form-control" asp-for="Note" rows="3"></textarea>
+                <label>أضافه ملاحظه</label>
+            </div>
 
      
 
@@ -103,7 +109,7 @@
                </div>
            
             <div class="deviceOwner row empData">
-                <h3 class="py-4">بيانات الموظف صاحب الجهاز:</h3>
+                <h3 class="py-4">بيانات الموظف مسلم الجهاز:</h3>
                 <div class="form-floating mb-4 col-md-5  ">
                     <input class="form-control" onkeyup="getEmployeeData(this)"
                     asp-for="EmployeeDeliverFromId"
@@ -149,6 +155,8 @@
                         <span asp-validation-for="DelivaryDate" class="text-danger"></span>
 
                     </div>
+
+           
                    
                    <button class="btn btn-primary btn-l" type="submit">حفظ</button>
                 </form>
@@ -160,6 +168,7 @@
 @section Plugins{
     <script src="~/lib/datetimepicker/moment.min.js"></script>
     <script src="~/lib/datetimepicker/daterangepicker.min.js"></script>
+    <script src="~/sweetalert2/sweetalert2.min.js"></script>
 }
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />

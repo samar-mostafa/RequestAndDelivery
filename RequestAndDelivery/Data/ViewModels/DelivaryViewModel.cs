@@ -7,6 +7,7 @@
         public string SerialNumber { get; set; }
         public string Model { get; set; }
         public bool IsNew { get; set; }
+        public string  Note { get; set; }
         public string DelivaryDate { get; set; }
         public string EmployeeDeliverToId { get; set; }
         public string EmployeeDeliverFromId { get; set; }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace RequestAndDelivery.Data.ViewModels
 {
@@ -14,6 +15,7 @@ namespace RequestAndDelivery.Data.ViewModels
     }
     public class FilterRequestsViewModel: GetRequestToDeliverViewModel
     {
+        [Remote("ValidateDateGreaterThan", "Requests" ,AdditionalFields ="DateFrom",ErrorMessage ="التاريخ غير صحيح...يجب ادخال قيمه اكبر من التاريخ من")]
         public DateTime? DateTo { get; set; }
       
           

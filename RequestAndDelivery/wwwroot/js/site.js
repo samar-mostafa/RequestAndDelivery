@@ -1,4 +1,23 @@
 ﻿
+function showSuccessMessage() {
+    Swal.fire({
+        title: "Good job!",
+        text: "تم الحفظ بنجاح",
+        icon: "success"
+    });
+    $("form").trigger('reset')
+}
+
+function showErrorMessage() {
+    Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "هناك خطأ ما ..حاول مره أخري",
+       
+    });
+   
+}
+
 function getBranchDepartments(id, dep) {
     $.get({
         url: "/Requests/GetBranchDepartments/" + id,

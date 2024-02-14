@@ -32,6 +32,7 @@ namespace RequestAndDelivery.Controllers
                 SerialNumber = d.Device.SerialNumber,
                 Model = d.Device.Model,
                 IsNew = d.Device.IsNew,
+                Note=d.Note,
                 ExportNumber = d.Request.ExportNumber,
                 EmployeeDeliverToId = d.Device.EmployeeDeliverToId,
                 EmployeeDeliverFromId = d.Device.EmployeeDeliverFromId
@@ -95,6 +96,7 @@ namespace RequestAndDelivery.Controllers
                 RequestId = mdl.RequestId,
                 DelivaryDate = mdl.DelivaryDate,
                 DeviceId = devic.SerialNumber,
+                Note=mdl.Note
             };
             db.Delivaries.Add(entity);
             var req = db.Requests.SingleOrDefault(r => r.Id == mdl.RequestId);

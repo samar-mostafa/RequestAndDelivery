@@ -39,10 +39,11 @@
                             <th class="text-center">السيريال </th>
                             <th class="text-center">الموديل</th>
                             <th  class="text-center">حاله الجهاز</th>
+                            <th class="text-center">الملاحظات</th>
                             <th class="text-center">تاريخ التسليم</th>
                             <th class="text-center"> رقم تليفون مستلم الجهاز</th>
                             <th class="text-center">بيانات الموظف مستلم الجهاز</th>
-                            <th class="text-center">بيانات الموظف صاحب الجهاز</th>
+                            <th class="text-center">بيانات الموظف مسلم الجهاز</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
@@ -63,6 +64,7 @@
                                     <td>نقل مناقيل</td>
                                     
                                 }
+                                <td>@item.Note</td>
                                 <td>@item.DelivaryDate</td>
                                 <td>@item.EmployeeDeliverToId</td>
 
@@ -83,7 +85,7 @@
                                 {
                                     <td>
                                         <a id="btn" href="javascript:;" class=" btn btn-outline-info js-model-render"
-                                   data-title="بيانات الموظف صاحب الجهاز" data-url="/Requests/GetEmployeeData/@item.EmployeeDeliverFromId">
+                                   data-title="بيانات الموظف مسلم الجهاز" data-url="/Requests/GetEmployeeData/@item.EmployeeDeliverFromId">
                                             <i class="fa-solid fa-user"></i>
                                         </a>
                                     </td>
@@ -113,7 +115,7 @@
 }
 
 @section Scripts{
-  
+ 
   
     <script>
       

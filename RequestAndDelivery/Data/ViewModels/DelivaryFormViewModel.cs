@@ -25,11 +25,10 @@ namespace RequestAndDelivery.Data.ViewModels
         [Required(ErrorMessage = "يجب ادخال اسم الموظف")]
         public string EmployeeDeliverToName { get; set; }
         [Required(ErrorMessage = "يجب ادخال رقم تليفون الموظف")]
-        [MinLength(11, ErrorMessage = "يجب ادخال 11 رقم ")]
-        [MaxLength(11, ErrorMessage = "يجب ادخال 11 رقم فقط")]
+        [RegularExpression("^01[0,1,2,5]{1}[0-9]{8}$", ErrorMessage = "رقم التليفون غير صحيح")]
         public string EmployeeDeliverToId { get; set; }
 
-       
+        public string Note { get; set; }
         public int? EmployeeDeliverFromDepartmentId { get; set; }
        
         public int? EmployeeDeliverFromBranchId { get; set; }

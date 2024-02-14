@@ -8,6 +8,7 @@
         public string RequestDate { get; set; }
         public string EmpNumber { get; set; }
         public bool IsDeliverd { get; set; }
+        public string Note { get; set; }
     }
 
     public class FilteredRequestViewModel : RequestViewModel

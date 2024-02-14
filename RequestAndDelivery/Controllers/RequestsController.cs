@@ -46,6 +46,7 @@ namespace RequestAndDelivery.Controllers
                        IsDeliverd = r.IsDeliverd,
                        RequestDate = r.RequestDate.ToShortDateString(),
                        EmpNumber = r.EmployeeId,
+                       Note=r.Note
 
             });
           
@@ -108,12 +109,13 @@ namespace RequestAndDelivery.Controllers
                 EmployeeId = model.EmployeeId,
                 ExportNumber = model.ExportNumber,
                 RequestDate = model.RequestDate,
-                DeviceTypeId = model.DeviceTypeId
+                DeviceTypeId = model.DeviceTypeId,
+                Note= model.Note
             };
 
             db.Requests.Add(request);
             db.SaveChanges();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Create));
         }
 
 
@@ -189,7 +191,7 @@ namespace RequestAndDelivery.Controllers
         public IActionResult GetRequestsByFilters(FilterRequestsViewModel mdl)
         {
             var entities = db.Requests.Include(r => r.Employee).Include(r => r.DeviceType).
-                Where(r => r.IsDeliverd == Convert.ToBoolean( mdl.IsDeliverd) &&
+                Where(r =>! r.IsDeliverd &&
             (r.DeviceTypeId == mdl.DeviceTypeId || mdl.DeviceTypeId == null) &&
             (r.EmployeeId == mdl.EmployeeId || mdl.EmployeeId == null) &&
             (r.RequestDate >= mdl.DateFrom || mdl.DateFrom == null) &&
@@ -202,7 +204,7 @@ namespace RequestAndDelivery.Controllers
             {   
                 DeviceType = r.DeviceType.Type,
                 ExportNumber = r.ExportNumber,
-                IsDeliverd = r.IsDeliverd,
+                //IsDeliverd = r.IsDeliverd,
                 RequestDate = r.RequestDate.ToShortDateString(),
                 EmpNumber = r.EmployeeId,
                 EmpName = r.Employee.Name,
@@ -225,8 +227,12 @@ namespace RequestAndDelivery.Controllers
             return Ok(jsonData);
         }
 
-     
-
+       
+        public IActionResult ValidateDateGreaterThan(FilterRequestsViewModel mdl)
+        {
+            bool greaterThan = mdl.DateTo >= mdl.DateFrom;
+            return Json(greaterThan);
+        }
 
 }
 

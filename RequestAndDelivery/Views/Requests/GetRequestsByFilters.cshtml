@@ -37,25 +37,13 @@
                     <option value=null selected>أختر نوع الجهاز</option>
                 </select>
             </div>
-            <div class="col-md-4 mb-4 offset-md-3">
+            <div class="col-md-4 mb-4 ">
                 <h5>رقم الصادر</h5>
                 <input id="ExportNumber" class="form-control fs-5" asp-for="ExportNumber" />
                        
                 
             </div>
-               @* <div class="row mb-5">
-                    <div class="form-check form-switch mb-3">
-                        <input class="form-check-input" type="checkbox" asp-for="IsDeliverd">
-                        <label class="form-check-label" asp-for="IsDeliverd"></label>
-                    </div>
-
-                </div>*@
-                <div class="form-check form-switch col-md-4 my-4">
-                    <input class="form-check-input fs-3 isDeliverdCheck" type="checkbox" role="switch" id="IsDeliverd" asp-for="IsDeliverd">
-                    <label class="form-check-label fs-5" for="IsDeliverd">تم التسليم؟</label>
-                </div>
-             
-            <div class="col-md-4 mb-4 offset-md-3">
+            <div class="col-md-4 mb-4 ">
                 <h5>رقم تليفون الموظف</h5>
                 <input id="EmployeeId" class="form-control fs-5" asp-for="EmployeeId" />
 
@@ -67,6 +55,19 @@
 
 
             </div>
+               @* <div class="row mb-5">
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" asp-for="IsDeliverd">
+                        <label class="form-check-label" asp-for="IsDeliverd"></label>
+                    </div>
+
+                </div>*@
+               @*  <div class="form-check form-switch col-md-4 my-4">
+                    <input class="form-check-input fs-3 isDeliverdCheck" type="checkbox" role="switch" id="IsDeliverd" asp-for="IsDeliverd">
+                    <label class="form-check-label fs-5" for="IsDeliverd">تم التسليم؟</label>
+                </div> *@
+             
+           
             <div class="col-md-4 mb-4 offset-md-3">
                 <h5>التاريخ من</h5>
                 <input asp-for=DateFrom class="form-control fs-5" id="DateFrom" type="date" />
@@ -74,6 +75,7 @@
             <div class="col-md-4 mb-4">
                 <h5> التاريخ إلي</h5>
                 <input asp-for=DateTo class="form-control fs-5" id="DateTo" type="date" />
+                <span asp-validation-for="DateTo" class="text-danger"></span>
             </div>
             <div class="col-md-5 m-auto mt-5">
                 <button type="button" onclick="resetToDefault()" class="btn btn-info fs-6 m-auto">إعاده تشغيل</button>
@@ -95,7 +97,7 @@
                 <th class="text-center">نوع الجهاز</th>
                 <th class="text-center">تاريخ الطلب</th>
                 <th class="text-center">رقم الصادر</th>
-                <th class="text-center">حاله التسليم</th>
+                @* <th class="text-center">حاله التسليم</th> *@
                 <th class="text-center">اسم الموظف</th>
                 <th class="text-center">رقم تليفون الموظف</th>
                 <th class="text-center">الفرع</th>
@@ -119,34 +121,39 @@
     <script src="~/lib/datatable/buttons.print.min.js"></script>
 }
         @section Scripts{
+    <partial name="_ValidationScriptsPartial" />
             <script>
         function resetToDefault() {
             window.location.reload();
         }
 
-        var buttonCommon = {
-            exportOptions: {
-                columns: [6, 5, 4, 3, 2, 1, 0],
-                //columns: columns.reverse(),
-                format: {
+        // var buttonCommon = {
+        //     exportOptions: {
+        //         columns: [6, 5, 4, 3, 2, 1, 0],
+        //         //columns: columns.reverse(),
+        //         format: {
 
-                    body: function (data, row, column, node) {
+        //             body: function (data, row, column, node) {
                         
-                        if (column === 3){
+        //                 if (column === 3){
 
-                            if ($('.fa-circle-check').html() === undefined)
-                                return data = "لم يتم التسليم"
-                                else
-                                return data = "تم التسليم "
-                        }
-                        else
-                        return data ;
-                    }
-                }
-            }
-        };
+        //                     if ($('.fa-circle-check').html() === undefined)
+        //                         return data = "لم يتم التسليم"
+        //                         else
+        //                         return data = "تم التسليم "
+        //                 }
+        //                 else
+        //                 return data ;
+        //             }
+        //         }
+        //     }
+        // };
             
             function getFilteredRequests(){
+            // if (Date.parse(document.getElementById("DateFrom").value) > Date.parse(document.getElementById("DateTo").value)) {
+            //     alert("Invalid Date Range!\nStart Date cannot be after End Date!")
+            //     return false;
+            // }
                 var data = {
                     BranchId: document.getElementById("BranchId").value,
                     DepartmentId: document.getElementById("Departments2").value,
@@ -155,7 +162,7 @@
                     ExportNumber: document.getElementById("ExportNumber").value,
                     DeviceTypeId: document.getElementById("DeviceTypeId").value,
                     EmployeeName: document.getElementById("EmployeeName").value,
-                    IsDeliverd: $('#IsDeliverd').prop('checked'),
+                    // IsDeliverd: $('#IsDeliverd').prop('checked'),
                     EmployeeId: document.getElementById("EmployeeId").value
                 }
            
@@ -177,13 +184,13 @@
                     { "data": "deviceType", "name": "DeviceType", "autowidth": true },
                     { "data": "requestDate", "name": "RequestDate", "autowidth": true },
                     { "data": "exportNumber", "name": "ExportNumber", "autowidth": true },
-                    {
-                        "name": "IsDeliverd",
-                     "render": function (data, type, row) {
-                        return`<span  style= "color:${(row.isDeliverd ?'green':'red')};font-size:1.5rem" ><i class="fa-solid ${(row.isDeliverd ?'fa-circle-check':'fa-circle-xmark')}"> </i></span>`
+                    // {
+                    //     "name": "IsDeliverd",
+                    //  "render": function (data, type, row) {
+                    //     return`<span  style= "color:${(row.isDeliverd ?'green':'red')};font-size:1.5rem" ><i class="fa-solid ${(row.isDeliverd ?'fa-circle-check':'fa-circle-xmark')}"> </i></span>`
                                
-                        }
-                    },
+                    //     }
+                    // },
                     { "data": "empName", "name": "EmpName", "autowidth": true },
                     { "data": "empNumber", "name": "EmpNumber", "autowidth": true },
                     { "data": "branch", "name": "Branch", "autowidth": true },
@@ -191,17 +198,17 @@
                 ],
                 dom: 'Bfrtip',
                 buttons: [
-                    $.extend(true, {}, buttonCommon, {
+                    $.extend(true, {},{
                         extend: 'excel',
                         text: 'excel',
                         title: 'Requests',
                     }),
-                    $.extend(true, {}, buttonCommon, {
+                    $.extend(true, {}, {
                         extend: 'copy',
                         text: 'copy',
                         title: 'Requests',
                     }),
-                    $.extend(true, {}, buttonCommon, {
+                    $.extend(true, {}, {
                         extend: 'print',
                         messageTop: '<h1>الطلبات</h1>',
                         customize: function (win) {

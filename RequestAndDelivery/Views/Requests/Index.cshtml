@@ -60,6 +60,7 @@
                             <th class="text-center">تاريخ الطلب</th>
                             <th class="text-center">رقم الصادر</th>
                             <th  class="text-center">حاله التسليم</th>
+                            <th class="text-center">الملاحظات</th>
                              <th class="text-center">رقم تليفون الموظف</th>
                             <th class="text-center">بيانات الموظف صاحب الطلب</th>
                             <th class="text-center">حاله الطلب</th>
@@ -109,7 +110,7 @@
                         }*@
                     </tbody>
                 </table>
-
+               
             </div>
         </div>
     </div>
@@ -121,7 +122,8 @@
     <script src="~/lib/datatable/pdfmake.min.js"></script>
     <script src="~/lib/datatable/vfs_fonts.js"></script>
     <script src="~/lib/datatable/buttons.html5.min.js"></script>
-    <script src="~/lib/datatable/buttons.print.min.js"></script>
+ 
+    <script src="~/lib/datatable/buttons.print.min.js"></script> 
 }
 
 @section Scripts{
@@ -177,6 +179,7 @@
                                       return`<span  style= "color:${(row.isDeliverd ?'green':'red')};font-size:1.5rem" ><i class="fa-solid ${(row.isDeliverd ?'fa-circle-check':'fa-circle-xmark')}"> </i></span>`
                                     }
                         },
+                            { "data": "note", "name": "Note ", "autowidth": true },
                             { "data": "empNumber", "name": "EmpNumber", "autowidth": true },
                                
                          {  "render": function (data, type, row) {
@@ -220,6 +223,7 @@
                                 }),
                                 $.extend(true, {}, buttonCommon, {
                                     extend: 'copy',
+                               
                                     messageTop: function () {
 
                                         if ($('.fa-circle-check').html() === undefined)
@@ -232,40 +236,56 @@
                                             return 'جميع الطلبات';
                                     }
                                 }),
+                            
                                    
                             $.extend(true, {}, buttonCommon, {
                                 extend: 'print',
-                                messageTop: function () {
+                                oSelectorOpts: {
+                                    page: 'all'
+                                },
+                                bShowAll: true,
+                               
+                                title: function() {
 
                                     if ($('.fa-circle-check').html() === undefined)
-                                        return '<h1 style="text-align:center;color:red;">الطلبات التي لم يتم تسليمها</h1>';
+                                        return 'الطلبات التي لم يتم تسليمها';
 
                                     else if ($('.fa-circle-xmark').html() === undefined)
-                                        return '<h1 style="text-align:center;color:red;">الطلبات التي تم تسليمها</h1>';
+                                        return 'الطلبات التي تم تسليمها';
 
                                     else if ($('.fa-circle-xmark').html() !== undefined && $('.fa-circle-check').html() !== undefined)
-                                        return '<h1 style="text-align:center;color:red;">جميع الطلبات</h1>';
+                                        return 'جميع الطلبات';
 
                                    
 
                                 },
                                 customize: function (win) {
-                                    $(win.document.body).find('table').addClass('display').css('font-size', '20px');
-                                    $(win.document.body).find('tr:nth-child(odd) td').each(function (index) {
-                                        $(this).css('background-color', '#D0D0D0');
-                                    });
+                                    $(win.document.body).prepend('<h6 dir="rtl">إداره تكنولوجيا المعلومات</h6>');
+                                    $(win.document.body).prepend('<h4 dir="rtl">شركه مياه الشرب والصرف الصحي بالقليوبيه</h4>');
+                                   
+                                    $(win.document.body).find('table')
+                                        .addClass('compact')
+                                        .css('font-size', '10pt');
+                                   
+                                    // $(win.document.body).find('table').addClass('display').css('font-size', '20px');
+                                    // $(win.document.body).find('tr:nth-child(odd) td').each(function (index) {
+                                    //     $(this).css('background-color', '#D0D0D0');
+                                    // });
                                     $(win.document.body).find('h1').css('text-align', 'center');
+                                    $(win.document.body).find('h1').css('margin', '30px');
+                                  
+
                                 }
                             }),
 
                                  
                                     
                                     
-                                    //exportOptions:buttonCommon,
-                                    //// {
-                                    ////    columns: [4, 2, 1, 0]
+                                  //  exportOptions:buttonCommon,
+                                    // {
+                                    //    columns: [4, 2, 1, 0]
                                         
-                                    ////},
+                                    //},
                                   
                              
                                 'colvis'
