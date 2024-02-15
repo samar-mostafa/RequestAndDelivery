@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AspNetCore.Reporting;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -8,6 +9,7 @@ using RequestAndDelivery.Data.Domain_Models;
 using RequestAndDelivery.Data.ViewModels;
 using System.Linq.Dynamic.Core;
 using System.Net;
+using System.Security.Cryptography;
 
 namespace RequestAndDelivery.Controllers
 {
@@ -16,11 +18,13 @@ namespace RequestAndDelivery.Controllers
     {
         private readonly ApplicationDbContext db;
         private readonly IMapper mapper;
+        private readonly IWebHostEnvironment webHostEnvironment;
 
-        public DelivariesController(ApplicationDbContext db, IMapper mapper)
+        public DelivariesController(ApplicationDbContext db, IMapper mapper , IWebHostEnvironment webHostEnvironment)
         {
             this.db = db;
             this.mapper = mapper;
+            this.webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -240,6 +244,39 @@ namespace RequestAndDelivery.Controllers
             else
                 return Ok( new { id = entityId.FirstOrDefault() });
 
+        }
+
+
+        public IActionResult Print(FilterDeliveriesViewModel mdl)
+        {
+            var entities = db.Delivaries.Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverTo).ThenInclude(e => e.Branch)
+                .Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverTo).ThenInclude(e => e.Department)
+                .Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverFrom).ThenInclude(e => e.Department)
+                .Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverFrom).ThenInclude(e => e.Branch)
+                .Include(d => d.Request).ThenInclude(r => r.DeviceType)
+            .Where(d => (d.Request.DeviceTypeId == mdl.DeviceTypeId || mdl.DeviceTypeId == null) &&
+            (d.Request.ExportNumber == mdl.ExportNumber || mdl.ExportNumber == null) &&
+            (d.DeviceId == mdl.SerialNumber || mdl.SerialNumber == null) &&
+            (d.Device.Model == mdl.Model || mdl.Model == null) &&
+            (d.Device.IsNew.ToString() == mdl.IsNew || mdl.IsNew == null) &&
+            (d.DelivaryDate >= mdl.DateFrom || mdl.DateFrom == null) &&
+            (d.DelivaryDate <= mdl.DateTo || mdl.DateFrom == null) &&
+                (d.Device.EmployeeDeliverToId == mdl.EmployeeId ||
+            d.Device.EmployeeDeliverFromId == mdl.EmployeeId || mdl.EmployeeId == null) &&
+            (d.Device.EmployeeDeliverFrom.BranchId == mdl.BranchId ||
+            d.Device.EmployeeDeliverTo.BranchId == mdl.BranchId || mdl.BranchId == null) &&
+            (d.Device.EmployeeDeliverFrom.DepartmentId == mdl.DepartmentId ||
+                d.Device.EmployeeDeliverTo.DepartmentId == mdl.DepartmentId || mdl.DepartmentId == null));
+            //(d.Request.Employee.BranchId == mdl.BranchId || mdl.BranchId == null) &&
+            //(d.Request.Employee.DepartmentId == mdl.DepartmentId || mdl.DepartmentId == null) &&
+            //(d.Request.Employee.Name == mdl.EmployeeName || mdl.EmployeeName == null));
+
+            var mappingData = mapper.Map<IEnumerable<FilteredDeliveriesViewModel>>(entities).AsQueryable();
+            string path = $"{webHostEnvironment.WebRootPath}\\Reports\\filteredDeliveries.rdlc";
+            LocalReport localReport = new LocalReport(path);
+            localReport.AddDataSource("FilteredDeliveries", mappingData);
+            var report = localReport.Execute(RenderType.Pdf);
+            return File(report.MainStream, "application/pdf");
         }
     }
 }

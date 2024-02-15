@@ -93,32 +93,50 @@
                 </div>
 
             </div>
+            
 
 
         </form>
         <div class="ReqFilterTableH1">
             <h1 class=" mb-3">نتيجه البحث</h1>
         </div>
-
+   
+    
         <table id="deliveriesTable" class="table table-striped table-bordered dt-responsive nowrap" dir="rtl" lang="ar">
 
             <thead>
                 <tr>
+                    <th class="text-center" colspan="6">الجهاز</th>
+                    <th class="text-center" colspan="4">الموظف مستلم الجهاز</th>
+                    <th class="text-center" colspan="4">الموظف مسلم الجهاز</th>
+                </tr>
+                <tr>
                     <th class="text-center">نوع الجهاز</th>
                     <th class="text-center">الموديل</th>
-                      <th class="text-center">السيريال</th>
+                    <th class="text-center">السيريال</th>
                     <th class="text-center">رقم الصادر</th>
                     <th class="text-center">تاريخ التسليم</th>
-                    
+
                     <th class="text-center">حاله الجهاز</th>
-                    <th class="text-center">بيانات الموظف مستلم الجهاز</th>
-                    <th class="text-center">بيانات الموظف صاحب الجهاز</th>
+                    <th class="text-center">الاسم</th>
+                    <th class="text-center">رقم التليفون</th>
+                    <th class="text-center">الفرع</th>
+                    <th class="text-center">الإداره</th>
+                    <th class="text-center">الاسم</th>
+                    <th class="text-center">رقم التليفون</th>
+                    <th class="text-center">الفرع</th>
+                    <th class="text-center">الإداره</th>
+
+                    @*   <th class="text-center">بيانات الموظف مستلم الجهاز</th>
+                    <th class="text-center">بيانات الموظف مسلم الجهاز</th> *@
                 </tr>
             </thead>
             <tbody id="tBody">
             </tbody>
 
         </table>
+    
+       
 
     </div>
     @section Plugins{
@@ -140,7 +158,7 @@
             document.getElementById("status").value = null
         })
 
-
+      
 
         function getStatusOfDevice(){
        
@@ -157,7 +175,7 @@
 
             var buttonCommon = {
                 exportOptions: {
-                    columns: [7,6, 5, 4, 3, 2, 1, 0],
+                    columns: [13,12,11,10,9,8,7,6, 5, 4, 3, 2, 1, 0],
                     //columns: columns.reverse(),
                     format: {
 
@@ -195,6 +213,8 @@
                 "serverSide": true,
                 "filter": true,
                 scrollX: true,
+                scrollY: 200,
+                dom: 'Bfrtip',
                 "ajax": {
                     //IP +
                     url: "/Delivaries/DeliveriesByFilters",
@@ -218,20 +238,57 @@
                     },
                     {
                         "render": function (data, type, row) {
-                            return row.employeeDeliverToId == null ? `لا يوجد` : `الأسم:${row.empDelivarName}-- رقم التليفون:${row.employeeDeliverToId} -- الفرع:${row.branchDelivar} -- الإداره:${row.departmentDelivar}`
+                            return row.employeeDeliverToId == null ? `` : `${row.empDelivarName}`
 
 
                         }
                     },
                     {
                         "render": function (data, type, row) {
-                            return row.employeeDeliverFromId == null ? `لايوجد` : `الاسم:${row.empOwnerName} -- رقم التليفون:${row.employeeDeliverFromId} -- الفرع:${row.branchOwner} -- الإداره:${row.departmentOwner}`
+                            return row.employeeDeliverToId == null ? `` : `${row.employeeDeliverToId}`
+
+
+                        }
+                    },
+                    {
+                        "render": function (data, type, row) {
+                            return row.employeeDeliverToId == null ? ` ` : `${row.branchDelivar}`
+
+
+                        }
+                    },
+                    {
+                        "render": function (data, type, row) {
+                            return row.employeeDeliverToId == null ? ` ` : `${row.departmentDelivar}`
+
+
+                        }
+                    },
+                    {
+                        "render": function (data, type, row) {
+                            return row.employeeDeliverFromId == null ? ` ` : `${row.empOwnerName} `
+                        }
+                    },
+                    {
+                        "render": function (data, type, row) {
+                            return row.employeeDeliverFromId == null ? ` ` : `${row.employeeDeliverFromId}`
+                        }
+                    },
+                    {
+                        "render": function (data, type, row) {
+                            return row.employeeDeliverFromId == null ? ` ` : ` ${row.branchOwner}`
+                        }
+                    },
+                    {
+                        "render": function (data, type, row) {
+                            return row.employeeDeliverFromId == null ? ` ` : `${row.departmentOwner}`
                         }
                     }
                 ]
                 ,
-                dom: 'Bfrtip',
+            
                 buttons: [
+                    
                     $.extend(true, {}, buttonCommon, {
                         extend: 'excel',
                         text: 'excel',
@@ -245,14 +302,25 @@
 
                     $.extend(true, {}, buttonCommon, {
                         orientation: 'landscape',
+                       
                         extend: 'print',
                         title: 'الطلبات المسلمه',
                         customize: function (win) {
-                            $(win.document.body).find('table').addClass('display').css('font-size', '20px');
-                            $(win.document.body).find('tr:nth-child(odd) td').each(function (index) {
-                                $(this).css('background-color', '#D0D0D0');
-                            });
+                            $(win.document.body).prepend('<h4 Class="mx-5" dir="rtl">إداره تكنولوجيا المعلومات</h4>');
+                            $(win.document.body).prepend('<h4 Class="mx-5" dir="rtl">قطاع التخطيط والتطوير</h4>');
+                            $(win.document.body).prepend('<h5 dir="rtl">شركه مياه الشرب والصرف الصحي بالقليوبيه</h5>');
+                            $(win.document.body).css('font-size', '10pt');
+                            $(win.document.body).find('thead').prepend('<div class="header-print">' + $('#dt-header').val() + '</div>');
+                      
+
+                            $(win.document.body).find('table')
+                                .addClass('compact')
+                                .css('font-size', 'inherit');
+                            // $(win.document.body).find('table')
+                            //     .addClass('compact')
+                            //     .css('font-size', '10pt');
                             $(win.document.body).find('h1').css('text-align', 'center');
+                            $(win.document.body).find('h1').css('margin', '20px');
                         }
 
                     })
