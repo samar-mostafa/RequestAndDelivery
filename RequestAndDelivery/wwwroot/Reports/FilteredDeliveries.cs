@@ -1,70 +1,35 @@
-﻿namespace RequestAndDelivery.Reports
+﻿namespace RequestAndDelivery.wwwroot.Reports
 {
 }
 
-namespace RequestAndDelivery.Reports
+namespace RequestAndDelivery.wwwroot.Reports
 {
 }
 
-namespace RequestAndDelivery.Reports
+namespace RequestAndDelivery.wwwroot.Reports
 {
 }
 
-namespace RequestAndDelivery.Reports
+namespace RequestAndDelivery.wwwroot.Reports
 {
 }
 
-namespace RequestAndDelivery.Reports
+namespace WinFormsApp1
 {
 }
 
-namespace RequestAndDelivery.Reports
+namespace WinFormsApp1
 {
 }
 
-namespace RequestAndDelivery.Reports
+namespace WinFormsApp1
 {
 }
 
-namespace RequestAndDelivery.Reports
+namespace WinFormsApp1
 {
 }
 
-namespace RequestAndDelivery.Reports
+namespace WinFormsApp1
 {
-}
-
-namespace RequestAndDelivery.Reports
-{
-}
-
-namespace RequestAndDelivery.Reports
-{
-}
-
-namespace RequestAndDelivery.Reports
-{
-}
-
-namespace RequestAndDelivery.Reports
-{
-}
-
-namespace RequestAndDelivery.Reports
-{
-}
-
-namespace RequestAndDelivery.Reports
-{
-}
-
-namespace RequestAndDelivery.Reports
-{
-}
-
-public partial class FilteredDeliveries {
-}
-
-
-public partial class FilteredDeliveries {
 }

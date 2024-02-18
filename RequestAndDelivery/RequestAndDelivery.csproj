@@ -1,10 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\Reports\FilteredDeliveries.cs" />
+    <Content Remove="wwwroot\Reports\FilteredDeliveries.Designer.cs" />
+    <Content Remove="wwwroot\Reports\FilteredDeliveries.xsc" />
+    <Content Remove="wwwroot\Reports\FilteredDeliveries.xsd" />
+    <Content Remove="wwwroot\Reports\FilteredDeliveries.xss" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="wwwroot\Reports\FilteredDeliveries.cs" />
@@ -17,6 +25,7 @@
 
   <ItemGroup>
 	  <PackageReference Include="AspNetCore.Reporting" Version="2.1.0" />
+	  <PackageReference Include="ClosedXML" Version="0.102.2" />
 	  <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.1" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.1" />
 	  <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
@@ -44,7 +53,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\Reports\filteredDeliveries.rdlc" />
+    <EmbeddedResource Include="wwwroot\Reports\filteredDeliveries.rdlc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="wwwroot\Reports\FilteredDeliveries.xsc" />
     <None Include="wwwroot\Reports\FilteredDeliveries.xsd">
       <SubType>Designer</SubType>

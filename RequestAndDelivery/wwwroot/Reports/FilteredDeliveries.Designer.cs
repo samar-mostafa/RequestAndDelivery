@@ -10,7 +10,7 @@
 
 #pragma warning disable 1591
 
-namespace RequestAndDelivery.Reports {
+namespace RequestAndDelivery.wwwroot.Reports {
     
     
     /// <summary>
@@ -281,17 +281,15 @@ namespace RequestAndDelivery.Reports {
             
             private global::System.Data.DataColumn columnSerialNumber;
             
-            private global::System.Data.DataColumn columnType;
-            
             private global::System.Data.DataColumn columnModel;
+            
+            private global::System.Data.DataColumn columnType;
             
             private global::System.Data.DataColumn columnExportNumber;
             
             private global::System.Data.DataColumn columnIsNew;
             
             private global::System.Data.DataColumn columnNote;
-            
-            private global::System.Data.DataColumn columnDelivaryDate;
             
             private global::System.Data.DataColumn columnEmpDelivarName;
             
@@ -352,17 +350,17 @@ namespace RequestAndDelivery.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn TypeColumn {
+            public global::System.Data.DataColumn ModelColumn {
                 get {
-                    return this.columnType;
+                    return this.columnModel;
                 }
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn ModelColumn {
+            public global::System.Data.DataColumn TypeColumn {
                 get {
-                    return this.columnModel;
+                    return this.columnType;
                 }
             }
             
@@ -387,14 +385,6 @@ namespace RequestAndDelivery.Reports {
             public global::System.Data.DataColumn NoteColumn {
                 get {
                     return this.columnNote;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn DelivaryDateColumn {
-                get {
-                    return this.columnDelivaryDate;
                 }
             }
             
@@ -499,16 +489,15 @@ namespace RequestAndDelivery.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public DataTable1Row AddDataTable1Row(string SerialNumber, string Type, string Model, string ExportNumber, string IsNew, string Note, string DelivaryDate, string EmpDelivarName, string EmployeeDeliverToId, string BranchDelivar, string DepartmentDelivar, string EmpOwnerName, string EmployeeDeliverFromId, string BranchOwner, string DepartmentOwner) {
+            public DataTable1Row AddDataTable1Row(string SerialNumber, string Model, string Type, string ExportNumber, int IsNew, string Note, string EmpDelivarName, string EmployeeDeliverToId, string BranchDelivar, string DepartmentDelivar, string EmpOwnerName, string EmployeeDeliverFromId, string BranchOwner, string DepartmentOwner) {
                 DataTable1Row rowDataTable1Row = ((DataTable1Row)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         SerialNumber,
-                        Type,
                         Model,
+                        Type,
                         ExportNumber,
                         IsNew,
                         Note,
-                        DelivaryDate,
                         EmpDelivarName,
                         EmployeeDeliverToId,
                         BranchDelivar,
@@ -540,12 +529,11 @@ namespace RequestAndDelivery.Reports {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             internal void InitVars() {
                 this.columnSerialNumber = base.Columns["SerialNumber"];
-                this.columnType = base.Columns["Type"];
                 this.columnModel = base.Columns["Model"];
+                this.columnType = base.Columns["Type"];
                 this.columnExportNumber = base.Columns["ExportNumber"];
                 this.columnIsNew = base.Columns["IsNew"];
                 this.columnNote = base.Columns["Note"];
-                this.columnDelivaryDate = base.Columns["DelivaryDate"];
                 this.columnEmpDelivarName = base.Columns["EmpDelivarName"];
                 this.columnEmployeeDeliverToId = base.Columns["EmployeeDeliverToId"];
                 this.columnBranchDelivar = base.Columns["BranchDelivar"];
@@ -561,18 +549,16 @@ namespace RequestAndDelivery.Reports {
             private void InitClass() {
                 this.columnSerialNumber = new global::System.Data.DataColumn("SerialNumber", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnSerialNumber);
-                this.columnType = new global::System.Data.DataColumn("Type", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnType);
                 this.columnModel = new global::System.Data.DataColumn("Model", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnModel);
+                this.columnType = new global::System.Data.DataColumn("Type", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnType);
                 this.columnExportNumber = new global::System.Data.DataColumn("ExportNumber", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnExportNumber);
-                this.columnIsNew = new global::System.Data.DataColumn("IsNew", typeof(string), null, global::System.Data.MappingType.Element);
+                this.columnIsNew = new global::System.Data.DataColumn("IsNew", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnIsNew);
                 this.columnNote = new global::System.Data.DataColumn("Note", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnNote);
-                this.columnDelivaryDate = new global::System.Data.DataColumn("DelivaryDate", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnDelivaryDate);
                 this.columnEmpDelivarName = new global::System.Data.DataColumn("EmpDelivarName", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnEmpDelivarName);
                 this.columnEmployeeDeliverToId = new global::System.Data.DataColumn("EmployeeDeliverToId", typeof(string), null, global::System.Data.MappingType.Element);
@@ -747,22 +733,6 @@ namespace RequestAndDelivery.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string Type {
-                get {
-                    try {
-                        return ((string)(this[this.tableDataTable1.TypeColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'Type\' in table \'DataTable1\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableDataTable1.TypeColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public string Model {
                 get {
                     try {
@@ -774,6 +744,22 @@ namespace RequestAndDelivery.Reports {
                 }
                 set {
                     this[this.tableDataTable1.ModelColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string Type {
+                get {
+                    try {
+                        return ((string)(this[this.tableDataTable1.TypeColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Type\' in table \'DataTable1\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableDataTable1.TypeColumn] = value;
                 }
             }
             
@@ -795,10 +781,10 @@ namespace RequestAndDelivery.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string IsNew {
+            public int IsNew {
                 get {
                     try {
-                        return ((string)(this[this.tableDataTable1.IsNewColumn]));
+                        return ((int)(this[this.tableDataTable1.IsNewColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
                         throw new global::System.Data.StrongTypingException("The value for column \'IsNew\' in table \'DataTable1\' is DBNull.", e);
@@ -822,22 +808,6 @@ namespace RequestAndDelivery.Reports {
                 }
                 set {
                     this[this.tableDataTable1.NoteColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string DelivaryDate {
-                get {
-                    try {
-                        return ((string)(this[this.tableDataTable1.DelivaryDateColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'DelivaryDate\' in table \'DataTable1\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableDataTable1.DelivaryDateColumn] = value;
                 }
             }
             
@@ -983,18 +953,6 @@ namespace RequestAndDelivery.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsTypeNull() {
-                return this.IsNull(this.tableDataTable1.TypeColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetTypeNull() {
-                this[this.tableDataTable1.TypeColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public bool IsModelNull() {
                 return this.IsNull(this.tableDataTable1.ModelColumn);
             }
@@ -1003,6 +961,18 @@ namespace RequestAndDelivery.Reports {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public void SetModelNull() {
                 this[this.tableDataTable1.ModelColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public bool IsTypeNull() {
+                return this.IsNull(this.tableDataTable1.TypeColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public void SetTypeNull() {
+                this[this.tableDataTable1.TypeColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1039,18 +1009,6 @@ namespace RequestAndDelivery.Reports {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public void SetNoteNull() {
                 this[this.tableDataTable1.NoteColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsDelivaryDateNull() {
-                return this.IsNull(this.tableDataTable1.DelivaryDateColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetDelivaryDateNull() {
-                this[this.tableDataTable1.DelivaryDateColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

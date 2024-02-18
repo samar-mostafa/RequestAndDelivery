@@ -1,5 +1,8 @@
 ﻿using AspNetCore.Reporting;
 using AutoMapper;
+using ClosedXML.Excel;
+using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -7,9 +10,11 @@ using Microsoft.EntityFrameworkCore;
 using RequestAndDelivery.Data;
 using RequestAndDelivery.Data.Domain_Models;
 using RequestAndDelivery.Data.ViewModels;
+using System.Data;
 using System.Linq.Dynamic.Core;
 using System.Net;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace RequestAndDelivery.Controllers
 {
@@ -147,7 +152,6 @@ namespace RequestAndDelivery.Controllers
                 .Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverFrom).ThenInclude(e => e.Department)
                 .Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverFrom).ThenInclude(e => e.Branch)
                 .Include(d => d.Request).ThenInclude(r => r.DeviceType)
-
                 .Where(d => (d.Request.DeviceTypeId == mdl.DeviceTypeId || mdl.DeviceTypeId == null) &&
                 (d.Request.ExportNumber == mdl.ExportNumber || mdl.ExportNumber == null) &&
                 (d.DeviceId == mdl.SerialNumber || mdl.SerialNumber == null) &&
@@ -161,27 +165,8 @@ namespace RequestAndDelivery.Controllers
                 d.Device.EmployeeDeliverTo.BranchId == mdl.BranchId || mdl.BranchId == null) &&
                (d.Device.EmployeeDeliverFrom.DepartmentId == mdl.DepartmentId ||
                 d.Device.EmployeeDeliverTo.DepartmentId == mdl.DepartmentId || mdl.DepartmentId == null));
-            //(d.Request.Employee.BranchId == mdl.BranchId || mdl.BranchId == null) &&
-            //(d.Request.Employee.DepartmentId == mdl.DepartmentId || mdl.DepartmentId == null) &&
-            //(d.Request.Employee.Name == mdl.EmployeeName || mdl.EmployeeName == null));
-
             var mappingData = mapper.Map<IEnumerable<FilteredDeliveriesViewModel>>(entities).AsQueryable();
-
-            var pageSize = int.Parse(Request.Form["length"]);
-            var skip = int.Parse(Request.Form["start"]);
-
-            var sortingValue = Request.Form[string.Concat("columns[", Request.Form["order[0][column]"], "][data]")];
-            var sortDirection = Request.Form["order[0][dir]"];
-
-
-            mappingData.OrderBy(string.Concat(sortingValue, " ", sortDirection));
-
-
-            var data = mappingData.Skip(skip).Take(pageSize).ToList();
-
-            var recordsTotal = entities.Count();
-            var jsonData = new { recordsFiltered = recordsTotal, recordsTotal, data };
-            return Ok(jsonData);
+            return Ok(mappingData);
         }
 
         public IActionResult DeviceDeliverDetails(int id)
@@ -246,8 +231,8 @@ namespace RequestAndDelivery.Controllers
 
         }
 
-
-        public IActionResult Print(FilterDeliveriesViewModel mdl)
+        [HttpPost]
+        public IActionResult ExportToPdf(FilterDeliveriesViewModel mdl)
         {
             var entities = db.Delivaries.Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverTo).ThenInclude(e => e.Branch)
                 .Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverTo).ThenInclude(e => e.Department)
@@ -271,12 +256,18 @@ namespace RequestAndDelivery.Controllers
             //(d.Request.Employee.DepartmentId == mdl.DepartmentId || mdl.DepartmentId == null) &&
             //(d.Request.Employee.Name == mdl.EmployeeName || mdl.EmployeeName == null));
 
-            var mappingData = mapper.Map<IEnumerable<FilteredDeliveriesViewModel>>(entities).AsQueryable();
+            var mappingData = mapper.Map<IEnumerable<FilteredDeliveriesViewModel>>(entities).ToList();
             string path = $"{webHostEnvironment.WebRootPath}\\Reports\\filteredDeliveries.rdlc";
-            LocalReport localReport = new LocalReport(path);
-            localReport.AddDataSource("FilteredDeliveries", mappingData);
-            var report = localReport.Execute(RenderType.Pdf);
+            LocalReport localReport = new LocalReport(path);           
+            localReport.AddDataSource("DataSet1", mappingData);
+            var report = localReport.Execute(RenderType.Pdf,1,null,"");
             return File(report.MainStream, "application/pdf");
+        }
+    
+        [HttpPost]
+        public FileResult ExportToExcel(string filteredTable)
+        {
+            return File(Encoding.UTF8.GetBytes(filteredTable), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "DeliveredRequests.xls");
         }
     }
 }
