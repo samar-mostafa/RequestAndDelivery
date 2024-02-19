@@ -101,50 +101,34 @@
         <h1 class=" mb-3">نتيجه البحث</h1>
     </div>
 
-    <form asp-action="ExportToExcel" method="post">
-        <input type="hidden" name="filteredTable" />
-        <input id="exportToExcel" value="Excel" type="submit" />
-    </form>
-    <form asp-action="ExportToPdf" method="post">
-        <div class="row m-5 " hidden>
+    <div class="d-flex flex-row-reverse">
+       <div class="m-2">
+            <form asp-action="ExportToExcel" method="post">
+                <input type="hidden" name="filteredTable" />
+                <input id="exportToExcel" value="Excel" type="submit" />
+            </form>
+           
+       </div>
+       <div class="m-2">
+            <form asp-action="ExportToPdf" method="post">
+                <div class="row m-5 " hidden>
+                    <input id="BranchId2" asp-for="BranchId" />
+                    <input id="DepartmentId2" asp-for=DepartmentId />
+                    <input id="DeviceTypeId2" asp-for=DeviceTypeId />
+                    <input id="ExportNumber2" asp-for="ExportNumber" />
+                    <input id="SerialNumber2" asp-for="SerialNumber" />
+                    <input id="Model2" asp-for="Model" />
+                    <input id="status2" asp-for="IsNew" />
+                    <input id="EmployeeId2" asp-for="EmployeeId" />
+                    <input id="EmployeeName2" asp-for="EmployeeName" />
+                    <input id="DateFrom2" type="date" asp-for="DateFrom" />
+                    <input id="DateTo2" type="date" asp-for="DateTo" />
+                </div>
+                <input id="exportToPdf" value="pdf" type="submit" />
+            </form>
+       </div>
 
-
-            <input id="BranchId2" asp-for="BranchId" />
-            <input id="DepartmentId2" asp-for=DepartmentId/>
-            <input id="DeviceTypeId2"  asp-for=DeviceTypeId/>
-
-            <input id="ExportNumber2" asp-for="ExportNumber"/>
-
-
-
-            <input id="SerialNumber2" asp-for="SerialNumber"/>
-
-
-            <input id="Model2" asp-for="Model"/>
-
-
-
-            <input id="status2" asp-for="IsNew"/>
-
-
-            <input id="EmployeeId2" asp-for="EmployeeId"/>
-
-
-            <input id="EmployeeName2" asp-for="EmployeeName"/>
-
-
-
-            <input id="DateFrom2" type="date" asp-for="DateFrom"/>
-
-
-            <input id="DateTo2" type="date" asp-for="DateTo"/>
-
-
-
-        </div>
-
-        <input id="exportToPdf" value="pdf" type="submit" />
-    </form>
+   </div>
 
     <div id="excelTable">
         <table id="deliveriesTable" class="table table-striped table-bordered dt-responsive nowrap" dir="rtl" lang="ar">

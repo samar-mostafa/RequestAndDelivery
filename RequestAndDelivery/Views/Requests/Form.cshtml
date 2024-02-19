@@ -28,30 +28,34 @@
                     </div>
                    
                     <!--Employee Name input-->
+                    <div class="empData">
+                        <!-- mobile number input-->
+                        <div class="form-floating mb-4">
+                            <input onkeyup="getEmployeeData(this)" class="form-control" asp-for="EmployeeId" id="mobileNumber" type="text" placeholder="name@example.com" data-sb-validations="required" autocomplete="false" />
+                            <label>رقم التليفون</label>
+                            <span asp-validation-for="EmployeeId" class="text-danger"></span>
+
+                        </div>
                     <div class="form-floating mb-4">
-                        <input class="form-control" asp-for="EmployeeName" type="text" placeholder="أدخل اسم الموظف" data-sb-validations="required" autocomplete="false" />
+                            <input class="form-control empName" asp-for="EmployeeName" type="text" placeholder="أدخل اسم الموظف" data-sb-validations="required" autocomplete="false" />
                         <label >اسم الموظف</label>
                         <span asp-validation-for="EmployeeName" class="text-danger"></span>
                     </div>
-                    <!-- mobile number input-->
+                    
                     <div class="form-floating mb-4">
-                        <input class="form-control" asp-for="EmployeeId" id="mobileNumber" type="text" placeholder="name@example.com" data-sb-validations="required" autocomplete="false" />
-                        <label >رقم التليفون</label>
-                        <span asp-validation-for="EmployeeId" class="text-danger"></span>
-                        
-                    </div>
-                    <div class="form-floating mb-4">
-                        <select asp-items="@ViewBag.Branches" class="form-select js-select2Single" onchange="getBranchDepartments(this.value,'#Departments')"
+                            <select asp-items="@ViewBag.Branches" class="form-select js-select2Single empBranch" onchange="getBranchDepartments(this.value,'#Departments')"
                         asp-for="BranchId">
                             <option selected value="">أختر الفرع</option>
                         </select>
                         <span asp-validation-for="BranchId" class="text-danger"></span>
                     </div>
+                   
                     <div class="form-floating mb-4">
-                        <select class="form-select js-select2Single" id="Departments" asp-for="DepartmentId">
+                            <select class="form-select js-select2Single empDepart" id="Departments" asp-for="DepartmentId">
                             <option selected value="">أختر الاداره</option>
                         </select>
                         <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                    </div>
                     </div>
                     <div class="form-floating mb-4">
                         <input class="form-control" type="text" placeholder="" asp-for="ExportNumber" autocomplete="false" />
