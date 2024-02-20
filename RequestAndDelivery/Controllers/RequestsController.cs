@@ -37,7 +37,7 @@ namespace RequestAndDelivery.Controllers
         [HttpPost]
         public IActionResult GetRequests(bool? val)
         {
-            var requests = db.Requests.Include(r => r.DeviceType).Where(r => r.IsDeliverd == val || val == null)
+            var requests = db.Requests.Include(r=>r.Employee).Include(r => r.DeviceType).Where(r => r.IsDeliverd == val || val == null)
             .Select(r => new RequestViewModel
             {
                        Id = r.Id,
@@ -45,7 +45,7 @@ namespace RequestAndDelivery.Controllers
                        ExportNumber = r.ExportNumber,
                        IsDeliverd = r.IsDeliverd,
                        RequestDate = r.RequestDate.ToShortDateString(),
-                       EmpNumber = r.EmployeeId,
+                       EmpNumber = r.Employee.MobileNumber,
                        Note=r.Note
 
             });
@@ -89,24 +89,21 @@ namespace RequestAndDelivery.Controllers
                 return View("Form", model);
             }
 
-          
-            if(!db.Employees.Any(e => e.MobileNumber == model.EmployeeId))
-            {
-               
-                var employee=new Employee
-                {
-                    MobileNumber = model.EmployeeId,
-                    Name = model.EmployeeName,
-                    BranchId = model.BranchId,
-                    DepartmentId = model.DepartmentId
-                };
-              
-                db.Employees.Add(employee);
-            }
+                    var employee = new Employee
+                    {
+                        MobileNumber = model.EmployeeId,
+                        Name = model.EmployeeName,
+                        BranchId = model.BranchId,
+                        DepartmentId = model.DepartmentId
+                    };
+
+                    db.Employees.Add(employee);
+               db.SaveChanges();
+
 
             var request = new Request
             {
-                EmployeeId = model.EmployeeId,
+                EmployeeId = employee.Id,
                 ExportNumber = model.ExportNumber,
                 RequestDate = model.RequestDate,
                 DeviceTypeId = model.DeviceTypeId,
@@ -193,7 +190,7 @@ namespace RequestAndDelivery.Controllers
             var entities = db.Requests.Include(r => r.Employee).Include(r => r.DeviceType).
                 Where(r =>! r.IsDeliverd &&
             (r.DeviceTypeId == mdl.DeviceTypeId || mdl.DeviceTypeId == null) &&
-            (r.EmployeeId == mdl.EmployeeId || mdl.EmployeeId == null) &&
+            (r.Employee.MobileNumber == mdl.EmployeeId || mdl.EmployeeId == null) &&
             (r.RequestDate >= mdl.DateFrom || mdl.DateFrom == null) &&
             (r.RequestDate <= mdl.DateTo || mdl.DateFrom == null) &&
             (r.ExportNumber == mdl.ExportNumber || mdl.ExportNumber == null) &&
@@ -206,10 +203,10 @@ namespace RequestAndDelivery.Controllers
                 ExportNumber = r.ExportNumber,
                 //IsDeliverd = r.IsDeliverd,
                 RequestDate = r.RequestDate.ToShortDateString(),
-                EmpNumber = r.EmployeeId,
+                EmpNumber = r.Employee.MobileNumber,
                 EmpName = r.Employee.Name,
-                Branch = db.Employees.Include(bd=>bd.Branch).Where(e=>e.MobileNumber==r.EmployeeId).Select(e=>e.Branch.Name).SingleOrDefault(),
-                Department = db.Employees.Include(bd => bd.Department).Where(e => e.MobileNumber == r.EmployeeId).Select(e => e.Department.Name).SingleOrDefault(),
+                Branch = db.Employees.Include(bd=>bd.Branch).Where(e=>e.MobileNumber==r.Employee.MobileNumber).Select(e=>e.Branch.Name).SingleOrDefault(),
+                Department = db.Employees.Include(bd => bd.Department).Where(e => e.MobileNumber == r.Employee.MobileNumber).Select(e => e.Department.Name).SingleOrDefault(),
             });
             var pageSize = int.Parse(Request.Form["length"]);
             var skip = int.Parse(Request.Form["start"]);

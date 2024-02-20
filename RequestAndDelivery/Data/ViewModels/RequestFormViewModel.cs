@@ -12,9 +12,8 @@ namespace RequestAndDelivery.Data.ViewModels
         public int BranchId { get; set; }
         [Required(ErrorMessage = "يجب اختيار نوع الجهاز")]
         public int DeviceTypeId { get; set; }
-        [Required(ErrorMessage = "يجب ادخال اسم الموظف")]
-        public string EmployeeName { get; set; }
-        [Required(ErrorMessage = "يجب ادخال رقم تليفون الموظف")]
+        
+        public string EmployeeName { get; set; }      
         [RegularExpression("^01[0,1,2,5]{1}[0-9]{8}$",ErrorMessage ="رقم التليفون غير صحيح")]
         public string EmployeeId { get; set; }
         //[Required(ErrorMessage = "يجب ادخال رقم الصادر")]
@@ -23,6 +22,6 @@ namespace RequestAndDelivery.Data.ViewModels
         [Required(ErrorMessage = "يجب ادخال تاريخ الطلب")]
         public DateTime RequestDate { get; set; }
 
-        public string? Note { get; set; }
+        public string Note { get; set; }
     }
 }

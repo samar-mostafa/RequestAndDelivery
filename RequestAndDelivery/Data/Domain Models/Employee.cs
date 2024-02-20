@@ -4,8 +4,8 @@ namespace RequestAndDelivery.Data.Domain_Models
 {
     public class Employee
     {
-        [Key]
-        
+
+        public int Id { get; set; }
         public string MobileNumber { get; set; }
         public string Name { get; set; }
         public int BranchId { get; set; }

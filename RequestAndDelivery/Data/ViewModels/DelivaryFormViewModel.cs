@@ -13,7 +13,6 @@ namespace RequestAndDelivery.Data.ViewModels
         public string ExportNumber { get; set; }
         [Required(ErrorMessage = "يجب ادخال سيريال الجهاز")]
         public string SerialNumber { get; set; }
-        [Required(ErrorMessage = "يجب ادخال الموديل")]
         public string Model { get; set; }
      
         public DateTime DelivaryDate { get; set; }=DateTime.Now;
@@ -22,9 +21,9 @@ namespace RequestAndDelivery.Data.ViewModels
         public int EmployeeDeliverToDepartmentId { get; set; }
         [Required(ErrorMessage = "يجب اختيار الفرع")]
         public int EmployeeDeliverToBranchId { get; set; }
-        [Required(ErrorMessage = "يجب ادخال اسم الموظف")]
+
         public string EmployeeDeliverToName { get; set; }
-        [Required(ErrorMessage = "يجب ادخال رقم تليفون الموظف")]
+
         [RegularExpression("^01[0,1,2,5]{1}[0-9]{8}$", ErrorMessage = "رقم التليفون غير صحيح")]
         public string EmployeeDeliverToId { get; set; }
 

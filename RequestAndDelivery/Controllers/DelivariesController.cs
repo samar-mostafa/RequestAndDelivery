@@ -33,7 +33,9 @@ namespace RequestAndDelivery.Controllers
         }
         public IActionResult Index()
         {
-            var data = db.Delivaries.Include(d => d.Request).Include(d => d.Device).Select(d => new DelivaryViewModel
+            var data = db.Delivaries.Include(d => d.Request).Include(d => d.Device).ThenInclude(d=>d.EmployeeDeliverFrom)
+                .Include(d => d.Device).ThenInclude(d => d.EmployeeDeliverTo)
+                .Select(d => new DelivaryViewModel
             {
                 Type = db.DeviceTypes.Where(dt => dt.Id == d.Request.DeviceTypeId)
                 .Select(dt => dt.Type).SingleOrDefault(),
@@ -43,8 +45,8 @@ namespace RequestAndDelivery.Controllers
                 IsNew = d.Device.IsNew,
                 Note=d.Note,
                 ExportNumber = d.Request.ExportNumber,
-                EmployeeDeliverToId = d.Device.EmployeeDeliverToId,
-                EmployeeDeliverFromId = d.Device.EmployeeDeliverFromId
+                EmployeeDeliverToId = d.Device.EmployeeDeliverTo.MobileNumber,
+                EmployeeDeliverFromId = d.Device.EmployeeDeliverFrom.MobileNumber,
 
             }).ToList();
             return View(data);
@@ -52,6 +54,7 @@ namespace RequestAndDelivery.Controllers
 
         public IActionResult Create(DelivaryFormViewModel mdl)
         {
+           
             if (!ModelState.IsValid)
             {
                 ViewBag.Branches = db.Branchs.Select(b => new
@@ -59,43 +62,42 @@ namespace RequestAndDelivery.Controllers
                 { Text = b.Name, Value = b.Id.ToString() });
                 return View("Form", mdl);
             }
-            if (!db.Employees.Any(e => e.MobileNumber == mdl.EmployeeDeliverToId))
-            {
-
-                var employee = new Employee
-                {
-                    MobileNumber = mdl.EmployeeDeliverToId,
-                    Name = mdl.EmployeeDeliverToName,
-                    BranchId = mdl.EmployeeDeliverToBranchId,
-                    DepartmentId = mdl.EmployeeDeliverToDepartmentId
-                };
-
-                db.Employees.Add(employee);
-            }
-
-            if (!mdl.IsNew)
-            {
-                if (!db.Employees.Any(e => e.MobileNumber == mdl.EmployeeDeliverFromId))
-                {
-
-                    var employee = new Employee
+            
+                    var EmployeeDeliverTo = new Employee
                     {
-                        MobileNumber = mdl.EmployeeDeliverFromId,
-                        Name = mdl.EmployeeDeliverFromName,
-                        BranchId = (int)mdl.EmployeeDeliverFromBranchId,
-                        DepartmentId = (int)mdl.EmployeeDeliverFromDepartmentId
+                        MobileNumber = mdl.EmployeeDeliverToId,
+                        Name = mdl.EmployeeDeliverToName,
+                        BranchId = mdl.EmployeeDeliverToBranchId,
+                        DepartmentId = mdl.EmployeeDeliverToDepartmentId
                     };
 
-                    //db.Employees.Add(employee);
-                }
+                    db.Employees.Add(EmployeeDeliverTo);
+            db.SaveChanges();
+
+
+            var EmployeeDeliverFrom = new Employee();
+
+            if (mdl.EmployeeDeliverFromId is not null)
+            {
+                 EmployeeDeliverFrom = new Employee
+                {
+                    MobileNumber = mdl.EmployeeDeliverFromId,
+                    Name = mdl.EmployeeDeliverFromName,
+                    BranchId = (int)mdl.EmployeeDeliverFromBranchId,
+                    DepartmentId = (int)mdl.EmployeeDeliverFromDepartmentId
+                };
+
+                db.Employees.Add(EmployeeDeliverFrom);
+                db.SaveChanges();
             }
+
             var devic = new Device
             {
                 SerialNumber = mdl.SerialNumber,
                 Model = mdl.Model,
                 IsNew = mdl.IsNew,
-                EmployeeDeliverToId = mdl.EmployeeDeliverToId,
-                EmployeeDeliverFromId = mdl.EmployeeDeliverFromId
+                EmployeeDeliverToId = EmployeeDeliverTo.Id,
+                EmployeeDeliverFromId = mdl.EmployeeDeliverFromId==null? null: EmployeeDeliverFrom?.Id
 
             };
             db.Devices.Add(devic);
@@ -104,7 +106,7 @@ namespace RequestAndDelivery.Controllers
             {
                 RequestId = mdl.RequestId,
                 DelivaryDate = mdl.DelivaryDate,
-                DeviceId = devic.SerialNumber,
+                DeviceId = mdl.SerialNumber,
                 Note=mdl.Note
             };
             db.Delivaries.Add(entity);
@@ -122,7 +124,7 @@ namespace RequestAndDelivery.Controllers
                 RequestId = req.Id,
                 DeviceType = req.DeviceType.Type,
                 ExportNumber = req.ExportNumber,
-                RequestEmployeeId = req.EmployeeId,
+                RequestEmployeeId = req.Employee.MobileNumber,
                 RequestEmployeeName = req.Employee.Name,
                 RequestEmployeeBranch = db.Branchs.Where(b => b.Id == req.Employee.BranchId).Select(b => b.Name).SingleOrDefault(),
                 RequestEmployeeDepartment = db.Departments.Where(b => b.Id == req.Employee.DepartmentId).Select(b => b.Name).SingleOrDefault(),
@@ -159,8 +161,8 @@ namespace RequestAndDelivery.Controllers
                 (d.Device.IsNew.ToString() == mdl.IsNew || mdl.IsNew == null) &&
                 (d.DelivaryDate >= mdl.DateFrom || mdl.DateFrom == null) &&
                 (d.DelivaryDate <= mdl.DateTo || mdl.DateFrom == null) &&
-                (d.Device.EmployeeDeliverToId == mdl.EmployeeId ||
-                d.Device.EmployeeDeliverFromId == mdl.EmployeeId || mdl.EmployeeId == null) &&
+                (d.Device.EmployeeDeliverTo.MobileNumber == mdl.EmployeeId ||
+                d.Device.EmployeeDeliverFrom.MobileNumber == mdl.EmployeeId || mdl.EmployeeId == null) &&
                 (d.Device.EmployeeDeliverFrom.BranchId == mdl.BranchId ||
                 d.Device.EmployeeDeliverTo.BranchId == mdl.BranchId || mdl.BranchId == null) &&
                (d.Device.EmployeeDeliverFrom.DepartmentId == mdl.DepartmentId ||
@@ -206,7 +208,7 @@ namespace RequestAndDelivery.Controllers
             Where(r => r.IsDeliverd == false &&
             (r.RequestDate == mdl.DateFrom || mdl.DateFrom == null) &&
             (r.DeviceTypeId == mdl.DeviceTypeId || mdl.DeviceTypeId == null) &&
-            (r.EmployeeId == mdl.EmployeeId || mdl.EmployeeId == null) &&
+            (r.Employee.MobileNumber == mdl.EmployeeId || mdl.EmployeeId == null) &&
             (r.ExportNumber == mdl.ExportNumber || mdl.ExportNumber == null) &&
             (r.Employee.Name == mdl.EmployeeName || mdl.EmployeeName == null) &&
             (r.Employee.BranchId == mdl.BranchId || mdl.BranchId == null) &&
@@ -246,8 +248,8 @@ namespace RequestAndDelivery.Controllers
             (d.Device.IsNew.ToString() == mdl.IsNew || mdl.IsNew == null) &&
             (d.DelivaryDate >= mdl.DateFrom || mdl.DateFrom == null) &&
             (d.DelivaryDate <= mdl.DateTo || mdl.DateFrom == null) &&
-                (d.Device.EmployeeDeliverToId == mdl.EmployeeId ||
-            d.Device.EmployeeDeliverFromId == mdl.EmployeeId || mdl.EmployeeId == null) &&
+                (d.Device.EmployeeDeliverTo.MobileNumber == mdl.EmployeeId ||
+            d.Device.EmployeeDeliverFrom.MobileNumber == mdl.EmployeeId || mdl.EmployeeId == null) &&
             (d.Device.EmployeeDeliverFrom.BranchId == mdl.BranchId ||
             d.Device.EmployeeDeliverTo.BranchId == mdl.BranchId || mdl.BranchId == null) &&
             (d.Device.EmployeeDeliverFrom.DepartmentId == mdl.DepartmentId ||

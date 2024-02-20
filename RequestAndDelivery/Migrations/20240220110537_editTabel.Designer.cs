@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RequestAndDelivery.Data;
 
@@ -11,9 +12,11 @@ using RequestAndDelivery.Data;
 namespace RequestAndDelivery.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240220110537_editTabel")]
+    partial class editTabel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -323,7 +326,7 @@ namespace RequestAndDelivery.Migrations
                     b.Property<string>("SerialNumber")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("EmployeeDeliverFromId")
+                    b.Property<int>("EmployeeDeliverFromId")
                         .HasColumnType("int");
 
                     b.Property<int>("EmployeeDeliverToId")
@@ -515,7 +518,9 @@ namespace RequestAndDelivery.Migrations
                 {
                     b.HasOne("RequestAndDelivery.Data.Domain_Models.Employee", "EmployeeDeliverFrom")
                         .WithMany()
-                        .HasForeignKey("EmployeeDeliverFromId");
+                        .HasForeignKey("EmployeeDeliverFromId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("RequestAndDelivery.Data.Domain_Models.Employee", "EmployeeDeliverTo")
                         .WithMany()
