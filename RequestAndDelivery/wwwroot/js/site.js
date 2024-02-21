@@ -5,7 +5,12 @@ function showSuccessMessage() {
         text: "تم الحفظ بنجاح",
         icon: "success"
     });
-    $("form").trigger('reset')
+    $('#reqForm').find("input[type=text], textarea").val("")
+    $('#deviceTypes').prop('selectedIndex', 0).change();
+    $('#Branches').prop('selectedIndex', 0).change();
+    $('#Departments').prop('selectedIndex', 0).change();
+   // $('#reqForm')[0].reset();
+   // $("form").trigger('reset')
 }
 
 function showErrorMessage() {

@@ -66,6 +66,7 @@
                             <th class="text-center">الفرع</th>
                             <th class="text-center">الاداره</th>
                             <th class="text-center">الملاحظات</th>
+                            <th class="text-center">تعديل</th>
                             <th class="text-center">حاله الطلب</th>
                         </tr>
                     </thead>
@@ -147,7 +148,18 @@
                              { "data": "branch", "name": "Branch", "autowidth": true },
                             { "data": "department", "name": "Department", "autowidth": true },
                             { "data": "note", "name": "Note", "autowidth": true },
-                               
+                            {
+                                "render": function (data, type, row) {
+                                    return !row.isDeliverd ? `
+
+                                                            <td><a class="btn btn-primary"  href ="/Requests/Edit/${row.id}"
+                                                    ><i class="fa-solid fa-edit"></i></a></td>
+                                                ` :
+                                        `
+                                                                             <td>لا يمكن التعديل</td>
+                                                    `
+                                }
+                            },
                          
                                 {
                                     "render": function (data, type, row) {

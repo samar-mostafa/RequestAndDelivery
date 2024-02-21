@@ -9,23 +9,29 @@
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-lg-8 col-xl-6 text-center">
-                <h2 class="mt-5">ادخال طلب جديد</h2>
+              
+                <h2 class="mt-5">@(Model?.Id > 0 ? "تعديل الطلب" : "ادخال طلب جديد")</h2>
                 <hr class="divider" />
             </div>
         </div>
         <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
             <div class="col-lg-6">              
-                <form asp-action="Create" 
-                data-ajax-method="post"
+                <form id="reqForm" asp-action="@(Model?.Id > 0  ? "Edit" : "Create")"
+                      data-ajax-method="post"
                 data-ajax="true"
                       data-ajax-success="showSuccessMessage"
                       data-ajax-failure="showErrorMessage">
                     <div class="form-floating mb-4">
-                        <select class="form-select js-select2Single" asp-for="DeviceTypeId" asp-items="@ViewBag.DeviceTypes" >
+                        <select class="form-select js-select2Single" id="deviceTypes" asp-for="DeviceTypeId" asp-items="@ViewBag.DeviceTypes" >
                             <option selected value="">أختر نوع الجهاز</option>
                         </select>
                         <span asp-validation-for="DeviceTypeId" class="text-danger"></span>
                     </div>
+                    @if (Model?.Id > 0)
+                    {
+                        <input hidden asp-for="Id" />
+                        <input hidden asp-for="EmpId" />
+                    }
                    
                     <!--Employee Name input-->
                     <div class="empData">
@@ -43,7 +49,7 @@
                     </div>
                     
                     <div class="form-floating mb-4">
-                            <select asp-items="@ViewBag.Branches" class="form-select js-select2Single empBranch" onchange="getBranchDepartments(this.value,'#Departments')"
+                            <select id="Branches" asp-items="@ViewBag.Branches" class="form-select js-select2Single empBranch" onchange="getBranchDepartments(this.value,'#Departments')"
                         asp-for="BranchId">
                             <option selected value="">أختر الفرع</option>
                         </select>
@@ -51,7 +57,7 @@
                     </div>
                    
                     <div class="form-floating mb-4">
-                            <select class="form-select js-select2Single empDepart" id="Departments" asp-for="DepartmentId">
+                            <select id="Departments" asp-items="@(Model!=null ? ViewBag.Departments : null )" class="form-select js-select2Single empDepart" id="Departments" asp-for="DepartmentId">
                             <option selected value="">أختر الاداره</option>
                         </select>
                         <span asp-validation-for="DepartmentId" class="text-danger"></span>

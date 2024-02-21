@@ -22,6 +22,7 @@ namespace RequestAndDelivery.Data.ViewModels
         [Required(ErrorMessage = "يجب ادخال تاريخ الطلب")]
         public DateTime RequestDate { get; set; }
 
+        public int EmpId { get; set; }
         public string Note { get; set; }
     }
 }

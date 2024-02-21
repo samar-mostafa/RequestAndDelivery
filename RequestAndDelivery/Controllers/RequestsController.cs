@@ -9,6 +9,7 @@ using System.Linq.Dynamic.Core;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authorization;
+using DocumentFormat.OpenXml.Office2010.Excel;
 
 namespace RequestAndDelivery.Controllers
 {
@@ -74,6 +75,61 @@ namespace RequestAndDelivery.Controllers
             var recordsTotal = requests.Count();
             var jsonData = new { recordsFiltered = recordsTotal, recordsTotal, data };
             return Ok(jsonData);
+        }
+
+        public IActionResult Edit(int id)
+        {
+            var entity = db.Requests.Include(r=>r.DeviceType).Include(r=>r.Employee).SingleOrDefault(r=>r.Id==id);
+            if(entity == null)
+                return NotFound();
+            var model = new RequestFormViewModel
+            {
+                Id = entity.Id,
+                Note=entity.Note,
+                ExportNumber=entity.ExportNumber,
+                RequestDate = entity.RequestDate.Date,
+                BranchId= entity.Employee.BranchId,
+                DepartmentId=entity.Employee.DepartmentId,
+                DeviceTypeId=entity.DeviceTypeId,
+                EmployeeId=entity.Employee.MobileNumber,
+                EmployeeName=entity.Employee.Name,
+                EmpId=entity.EmployeeId
+            };
+            ViewBag.DeviceTypes = db.DeviceTypes.Select(d => new SelectListItem { Value = d.Id.ToString(), Text = d.Type ,});           
+            ViewBag.Branches = db.Branchs.Select(b => new SelectListItem { Text = b.Name, Value = b.Id.ToString() });
+            ViewBag.Departments = db.Departments.Include(d => d.Branchs).Where(d => d.Branchs.BranchId == entity.Employee.BranchId)
+                .Select(b => new SelectListItem { Text = b.Name, Value = b.Id.ToString() }); ;
+            return View("Form",model);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(RequestFormViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.DeviceTypes = db.DeviceTypes.Select(d => new SelectListItem { Value = d.Id.ToString(), Text = d.Type });
+                ViewBag.Branches = db.Branchs.Select(b => new SelectListItem { Text = b.Name, Value = b.Id.ToString() });
+                return View("Form", model);
+            }
+
+           var entity= db.Requests.Include(r => r.DeviceType).Include(r => r.Employee).SingleOrDefault(r => r.Id == model.Id);
+            if (entity is null)
+                return NotFound();
+
+            entity.Note = model.Note;
+            entity.RequestDate= model.RequestDate;
+            entity.ExportNumber=model.ExportNumber;
+            entity.DeviceTypeId = model.DeviceTypeId;
+            entity.EmployeeId=model.EmpId;
+            entity.Employee.MobileNumber = model.EmployeeId;
+            entity.Employee.BranchId=model.BranchId;
+            entity.Employee.DepartmentId=model.DepartmentId;
+            entity.Employee.Name=model.EmployeeName;
+            
+            db.SaveChanges();
+
+         
+            return Ok();
         }
 
         public IActionResult Create()
