@@ -61,54 +61,16 @@
                             <th class="text-center">تاريخ الطلب</th>
                             <th class="text-center">رقم الصادر</th>
                             <th  class="text-center">حاله التسليم</th>
-                            <th class="text-center">الملاحظات</th>
+                            <th class="text-center">اسم الموظف</th>
                              <th class="text-center">رقم تليفون الموظف</th>
-                            <th class="text-center">بيانات الموظف صاحب الطلب</th>
+                            <th class="text-center">الفرع</th>
+                            <th class="text-center">الاداره</th>
+                            <th class="text-center">الملاحظات</th>
                             <th class="text-center">حاله الطلب</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
-                      @*  @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>@item.DeviceType</td>
-                                <td>@item.RequestDate</td>
-                                <td>@item.ExportNumber</td>
-                               @if(item.IsDeliverd)
-                                   {
-                                    <td id="deliverd"><span style="color:green ;font-size:1.5rem"><i class="fa-solid fa-circle-check"></i></span></td>
-                                    
-                                }
-                                else
-                                {
-                                    <td id="notdeliverd"><span style="color:red;font-size:1.5rem"><i class="fa-solid fa-circle-xmark"></i></span></td>
-                                    
-                                }
-                                <td>@item.EmpNumber</td>
-
-                                <td>
-                                    <a id="btn" href="javascript:;" class=" btn btn-outline-info js-model-render"
-                                   data-title="بيانات الموظف صاحب الطلب" data-url="/Requests/GetEmployeeData/@item.EmpNumber">
-                                        <i class="fa-solid fa-user"></i>
-                                    </a>
-                                </td>
-                                @if (item.IsDeliverd)
-                                {
-                                    <td>
-                                        <a class="btn btn-secondary" asp-action="GetDeviceDeliverInfo" asp-controller="Delivaries" asp-route-id="@item.Id"><i class="fa-solid fa-info"></i></a>
-                                    </td>
-
-                                }
-                                else
-                                {
-                                    <td>
-                                        <a class="btn btn-warning" asp-action="DeviceDeliver" asp-controller="Delivaries" asp-route-id="@item.Id"><i class="fa-solid fa-file-export"></i></a></td>
-
-                                }
-                               
-                            </tr>
-
-                        }*@
+                      
                     </tbody>
                 </table>
                
@@ -133,11 +95,11 @@
                  var buttonCommon = {
                   
                     exportOptions: {
-                         columns: [4,3,2,1,0],
+                         columns: [8,7,6,5,4,3,2,1,0],
                         format: {
                             //      $('.fa-circle-check').html() === undefined
                             body: function (data, row, column, node) {
-                                if (column === 1) {
+                                if (column === 5) {
                                     if (data.includes("fa-circle-check"))
                                         return data = "تم التسليم"
                                     else
@@ -180,15 +142,13 @@
                                       return`<span  style= "color:${(row.isDeliverd ?'green':'red')};font-size:1.5rem" ><i class="fa-solid ${(row.isDeliverd ?'fa-circle-check':'fa-circle-xmark')}"> </i></span>`
                                     }
                         },
-                            { "data": "note", "name": "Note ", "autowidth": true },
+                            { "data": "empName", "name": "EmpName ", "autowidth": true },
                             { "data": "empNumber", "name": "EmpNumber", "autowidth": true },
+                             { "data": "branch", "name": "Branch", "autowidth": true },
+                            { "data": "department", "name": "Department", "autowidth": true },
+                            { "data": "note", "name": "Note", "autowidth": true },
                                
-                         {  "render": function (data, type, row) {
-                                return `<a id="btn" href="javascript:;" class=" btn btn-outline-info js-model-render"
-                                           data-title="بيانات الموظف صاحب الطلب" data-url="/Requests/GetEmployeeData/${row.empNumber}">
-                                        <i class="fa-solid fa-user"></i>
-                                    </a>`}
-                        },
+                         
                                 {
                                     "render": function (data, type, row) {
                                         return row.isDeliverd ? `

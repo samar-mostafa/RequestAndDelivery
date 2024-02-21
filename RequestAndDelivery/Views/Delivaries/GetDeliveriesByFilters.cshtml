@@ -236,23 +236,24 @@
                 dataType: 'json',
                 data: data,
                 success: function (result) {
+                    console.log(result)
 
                     var data = '';
                     $.each(result, function (index, value) {
 
                         data += ` <tr>
                                                                         <td>${result[index].type}</td>
-                                                                <td>${result[index].model}</td>
+                                                                                <td>${result[index].model== null ? ' ' : result[index].model}</td>
                                                           <td>${result[index].serialNumber}</td>
                                                            <td>${result[index].exportNumber == null ? ' ' : result[index].exportNumber}</td>
                                                            <td>${result[index].delivaryDate}</td>
                                                             <td>${result[index].note == null ? ' ' : result[index].note}</td>
-                                                            <td>${result[index].empDelivarName}</td>
-                                                           <td>${result[index].employeeDeliverToId}</td>
+                                                                                    <td>${result[index].empDelivarName == null ? ' ' : result[index].empDelivarName}</td>
+                                                                                   <td>${result[index].employeeDeliverToMobile == null ? ' ' : result[index].employeeDeliverToMobile}</td>
                                                          <td>${result[index].branchDelivar}</td>
                                                            <td>${result[index].departmentDelivar}</td>
                                                                 <td>${result[index].empOwnerName == null ? ' ' : result[index].empOwnerName}</td>
-                                                                 <td>${result[index].employeeDeliverFromId == null ? ' ' : result[index].employeeDeliverFromId}</td>
+                                                                         <td>${result[index].employeeDeliverFromMobile == null ? ' ' : result[index].employeeDeliverFromMobile}</td>
                                                                  <td>${result[index].branchOwner == null ? ' ' : result[index].branchOwner}</td>
                                                                <td>${result[index].departmentOwner == null ? ' ' : result[index].departmentOwner}</td>
 

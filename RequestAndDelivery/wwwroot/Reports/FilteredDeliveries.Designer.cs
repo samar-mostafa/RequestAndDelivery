@@ -293,19 +293,21 @@ namespace RequestAndDelivery.wwwroot.Reports {
             
             private global::System.Data.DataColumn columnEmpDelivarName;
             
-            private global::System.Data.DataColumn columnEmployeeDeliverToId;
-            
             private global::System.Data.DataColumn columnBranchDelivar;
             
             private global::System.Data.DataColumn columnDepartmentDelivar;
             
             private global::System.Data.DataColumn columnEmpOwnerName;
             
-            private global::System.Data.DataColumn columnEmployeeDeliverFromId;
-            
             private global::System.Data.DataColumn columnBranchOwner;
             
             private global::System.Data.DataColumn columnDepartmentOwner;
+            
+            private global::System.Data.DataColumn columnEmployeeDeliverToMobile;
+            
+            private global::System.Data.DataColumn columnEmployeeDeliverFromMobile;
+            
+            private global::System.Data.DataColumn columnDelivaryDate;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
@@ -398,14 +400,6 @@ namespace RequestAndDelivery.wwwroot.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn EmployeeDeliverToIdColumn {
-                get {
-                    return this.columnEmployeeDeliverToId;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public global::System.Data.DataColumn BranchDelivarColumn {
                 get {
                     return this.columnBranchDelivar;
@@ -430,14 +424,6 @@ namespace RequestAndDelivery.wwwroot.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn EmployeeDeliverFromIdColumn {
-                get {
-                    return this.columnEmployeeDeliverFromId;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public global::System.Data.DataColumn BranchOwnerColumn {
                 get {
                     return this.columnBranchOwner;
@@ -449,6 +435,30 @@ namespace RequestAndDelivery.wwwroot.Reports {
             public global::System.Data.DataColumn DepartmentOwnerColumn {
                 get {
                     return this.columnDepartmentOwner;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public global::System.Data.DataColumn EmployeeDeliverToMobileColumn {
+                get {
+                    return this.columnEmployeeDeliverToMobile;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public global::System.Data.DataColumn EmployeeDeliverFromMobileColumn {
+                get {
+                    return this.columnEmployeeDeliverFromMobile;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public global::System.Data.DataColumn DelivaryDateColumn {
+                get {
+                    return this.columnDelivaryDate;
                 }
             }
             
@@ -489,7 +499,7 @@ namespace RequestAndDelivery.wwwroot.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public DataTable1Row AddDataTable1Row(string SerialNumber, string Model, string Type, string ExportNumber, int IsNew, string Note, string EmpDelivarName, string EmployeeDeliverToId, string BranchDelivar, string DepartmentDelivar, string EmpOwnerName, string EmployeeDeliverFromId, string BranchOwner, string DepartmentOwner) {
+            public DataTable1Row AddDataTable1Row(string SerialNumber, string Model, string Type, string ExportNumber, int IsNew, string Note, string EmpDelivarName, string BranchDelivar, string DepartmentDelivar, string EmpOwnerName, string BranchOwner, string DepartmentOwner, string EmployeeDeliverToMobile, string EmployeeDeliverFromMobile, string DelivaryDate) {
                 DataTable1Row rowDataTable1Row = ((DataTable1Row)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         SerialNumber,
@@ -499,13 +509,14 @@ namespace RequestAndDelivery.wwwroot.Reports {
                         IsNew,
                         Note,
                         EmpDelivarName,
-                        EmployeeDeliverToId,
                         BranchDelivar,
                         DepartmentDelivar,
                         EmpOwnerName,
-                        EmployeeDeliverFromId,
                         BranchOwner,
-                        DepartmentOwner};
+                        DepartmentOwner,
+                        EmployeeDeliverToMobile,
+                        EmployeeDeliverFromMobile,
+                        DelivaryDate};
                 rowDataTable1Row.ItemArray = columnValuesArray;
                 this.Rows.Add(rowDataTable1Row);
                 return rowDataTable1Row;
@@ -535,13 +546,14 @@ namespace RequestAndDelivery.wwwroot.Reports {
                 this.columnIsNew = base.Columns["IsNew"];
                 this.columnNote = base.Columns["Note"];
                 this.columnEmpDelivarName = base.Columns["EmpDelivarName"];
-                this.columnEmployeeDeliverToId = base.Columns["EmployeeDeliverToId"];
                 this.columnBranchDelivar = base.Columns["BranchDelivar"];
                 this.columnDepartmentDelivar = base.Columns["DepartmentDelivar"];
                 this.columnEmpOwnerName = base.Columns["EmpOwnerName"];
-                this.columnEmployeeDeliverFromId = base.Columns["EmployeeDeliverFromId"];
                 this.columnBranchOwner = base.Columns["BranchOwner"];
                 this.columnDepartmentOwner = base.Columns["DepartmentOwner"];
+                this.columnEmployeeDeliverToMobile = base.Columns["EmployeeDeliverToMobile"];
+                this.columnEmployeeDeliverFromMobile = base.Columns["EmployeeDeliverFromMobile"];
+                this.columnDelivaryDate = base.Columns["DelivaryDate"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -561,20 +573,22 @@ namespace RequestAndDelivery.wwwroot.Reports {
                 base.Columns.Add(this.columnNote);
                 this.columnEmpDelivarName = new global::System.Data.DataColumn("EmpDelivarName", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnEmpDelivarName);
-                this.columnEmployeeDeliverToId = new global::System.Data.DataColumn("EmployeeDeliverToId", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnEmployeeDeliverToId);
                 this.columnBranchDelivar = new global::System.Data.DataColumn("BranchDelivar", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnBranchDelivar);
                 this.columnDepartmentDelivar = new global::System.Data.DataColumn("DepartmentDelivar", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDepartmentDelivar);
                 this.columnEmpOwnerName = new global::System.Data.DataColumn("EmpOwnerName", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnEmpOwnerName);
-                this.columnEmployeeDeliverFromId = new global::System.Data.DataColumn("EmployeeDeliverFromId", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnEmployeeDeliverFromId);
                 this.columnBranchOwner = new global::System.Data.DataColumn("BranchOwner", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnBranchOwner);
                 this.columnDepartmentOwner = new global::System.Data.DataColumn("DepartmentOwner", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDepartmentOwner);
+                this.columnEmployeeDeliverToMobile = new global::System.Data.DataColumn("EmployeeDeliverToMobile", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnEmployeeDeliverToMobile);
+                this.columnEmployeeDeliverFromMobile = new global::System.Data.DataColumn("EmployeeDeliverFromMobile", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnEmployeeDeliverFromMobile);
+                this.columnDelivaryDate = new global::System.Data.DataColumn("DelivaryDate", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDelivaryDate);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -829,22 +843,6 @@ namespace RequestAndDelivery.wwwroot.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string EmployeeDeliverToId {
-                get {
-                    try {
-                        return ((string)(this[this.tableDataTable1.EmployeeDeliverToIdColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'EmployeeDeliverToId\' in table \'DataTable1\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableDataTable1.EmployeeDeliverToIdColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public string BranchDelivar {
                 get {
                     try {
@@ -893,22 +891,6 @@ namespace RequestAndDelivery.wwwroot.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public string EmployeeDeliverFromId {
-                get {
-                    try {
-                        return ((string)(this[this.tableDataTable1.EmployeeDeliverFromIdColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'EmployeeDeliverFromId\' in table \'DataTable1\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableDataTable1.EmployeeDeliverFromIdColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public string BranchOwner {
                 get {
                     try {
@@ -936,6 +918,55 @@ namespace RequestAndDelivery.wwwroot.Reports {
                 }
                 set {
                     this[this.tableDataTable1.DepartmentOwnerColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string EmployeeDeliverToMobile {
+                get {
+                    try {
+                        return ((string)(this[this.tableDataTable1.EmployeeDeliverToMobileColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'EmployeeDeliverToMobile\' in table \'DataTable1\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableDataTable1.EmployeeDeliverToMobileColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string EmployeeDeliverFromMobile {
+                get {
+                    try {
+                        return ((string)(this[this.tableDataTable1.EmployeeDeliverFromMobileColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'EmployeeDeliverFromMobile\' in table \'DataTable1\' is DBNull." +
+                                "", e);
+                    }
+                }
+                set {
+                    this[this.tableDataTable1.EmployeeDeliverFromMobileColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string DelivaryDate {
+                get {
+                    try {
+                        return ((string)(this[this.tableDataTable1.DelivaryDateColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'DelivaryDate\' in table \'DataTable1\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableDataTable1.DelivaryDateColumn] = value;
                 }
             }
             
@@ -1025,18 +1056,6 @@ namespace RequestAndDelivery.wwwroot.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsEmployeeDeliverToIdNull() {
-                return this.IsNull(this.tableDataTable1.EmployeeDeliverToIdColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetEmployeeDeliverToIdNull() {
-                this[this.tableDataTable1.EmployeeDeliverToIdColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public bool IsBranchDelivarNull() {
                 return this.IsNull(this.tableDataTable1.BranchDelivarColumn);
             }
@@ -1073,18 +1092,6 @@ namespace RequestAndDelivery.wwwroot.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsEmployeeDeliverFromIdNull() {
-                return this.IsNull(this.tableDataTable1.EmployeeDeliverFromIdColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetEmployeeDeliverFromIdNull() {
-                this[this.tableDataTable1.EmployeeDeliverFromIdColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public bool IsBranchOwnerNull() {
                 return this.IsNull(this.tableDataTable1.BranchOwnerColumn);
             }
@@ -1105,6 +1112,42 @@ namespace RequestAndDelivery.wwwroot.Reports {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public void SetDepartmentOwnerNull() {
                 this[this.tableDataTable1.DepartmentOwnerColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public bool IsEmployeeDeliverToMobileNull() {
+                return this.IsNull(this.tableDataTable1.EmployeeDeliverToMobileColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public void SetEmployeeDeliverToMobileNull() {
+                this[this.tableDataTable1.EmployeeDeliverToMobileColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public bool IsEmployeeDeliverFromMobileNull() {
+                return this.IsNull(this.tableDataTable1.EmployeeDeliverFromMobileColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public void SetEmployeeDeliverFromMobileNull() {
+                this[this.tableDataTable1.EmployeeDeliverFromMobileColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public bool IsDelivaryDateNull() {
+                return this.IsNull(this.tableDataTable1.DelivaryDateColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public void SetDelivaryDateNull() {
+                this[this.tableDataTable1.DelivaryDateColumn] = global::System.Convert.DBNull;
             }
         }
         

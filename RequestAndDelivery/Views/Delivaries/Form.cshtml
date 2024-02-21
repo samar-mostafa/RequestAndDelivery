@@ -57,7 +57,7 @@
 
                 <h3 class="py-4">بيانات الموظف المستلم للجهاز:</h3>
                 <div class="form-floating mb-4 col-md-5  ">
-                    <input class="form-control " onkeyup="getEmployeeData(this)"
+                    <input class="form-control " 
                            asp-for="EmployeeDeliverToId" type="text" placeholder="رقم التليفون" />
                     <label>رقم التليفون</label>
                     <span asp-validation-for="EmployeeDeliverToId" class="text-danger"></span>
@@ -111,7 +111,7 @@
             <div class="deviceOwner row empData">
                 <h3 class="py-4">بيانات الموظف مسلم الجهاز:</h3>
                 <div class="form-floating mb-4 col-md-5  ">
-                    <input class="form-control" onkeyup="getEmployeeData(this)"
+                    <input class="form-control"
                     asp-for="EmployeeDeliverFromId"
                     type="text" placeholder="رقم التليفون" />
                     <label>رقم التليفون</label>

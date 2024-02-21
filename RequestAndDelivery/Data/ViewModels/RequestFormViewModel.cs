@@ -14,7 +14,7 @@ namespace RequestAndDelivery.Data.ViewModels
         public int DeviceTypeId { get; set; }
         
         public string EmployeeName { get; set; }      
-        [RegularExpression("^01[0,1,2,5]{1}[0-9]{8}$",ErrorMessage ="رقم التليفون غير صحيح")]
+        [RegularExpression("^01[0,1,2,5,6]{1}[0-9]{8}$",ErrorMessage ="رقم التليفون غير صحيح")]
         public string EmployeeId { get; set; }
         //[Required(ErrorMessage = "يجب ادخال رقم الصادر")]
         //[Remote("AllowItem",null,AdditionalFields =nameof(Id),ErrorMessage ="رقم الصادر موجود بالفعل")]

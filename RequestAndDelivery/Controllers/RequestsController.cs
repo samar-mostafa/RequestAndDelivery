@@ -37,7 +37,9 @@ namespace RequestAndDelivery.Controllers
         [HttpPost]
         public IActionResult GetRequests(bool? val)
         {
-            var requests = db.Requests.Include(r=>r.Employee).Include(r => r.DeviceType).Where(r => r.IsDeliverd == val || val == null)
+            var requests = db.Requests.Include(r=>r.Employee).ThenInclude(e=>e.Branch)
+                .Include(r => r.Employee).ThenInclude(e => e.Department)
+                .Include(r => r.DeviceType).Where(r => r.IsDeliverd == val || val == null)
             .Select(r => new RequestViewModel
             {
                        Id = r.Id,
@@ -45,11 +47,13 @@ namespace RequestAndDelivery.Controllers
                        ExportNumber = r.ExportNumber,
                        IsDeliverd = r.IsDeliverd,
                        RequestDate = r.RequestDate.ToShortDateString(),
-                       EmpNumber = r.Employee.MobileNumber,
-                       Note=r.Note
-
+                       EmpNumber = r.Employee.MobileNumber,   
+                       Note=r.Note,
+                       EmpName=r.Employee.Name,
+                       Branch=r.Employee.Branch.Name,
+                       Department=r.Employee.Department.Name
             });
-          
+            
             var pageSize = int.Parse(Request.Form["length"]);
             var skip = int.Parse(Request.Form["start"]);
             var searchValue = Request.Form["search[value]"];
@@ -116,10 +120,10 @@ namespace RequestAndDelivery.Controllers
         }
 
 
-        public IActionResult GetEmployeeData(string id)
+        public IActionResult GetEmployeeData(int id)
         {
             var emp = db.Employees.Include(e=>e.Branch).Include(e=>e.Department)
-                .Where(e => e.MobileNumber == id)
+                .Where(e => e.Id == id)
                 .Select(e => new EmployeeDataViewModel
                 {
                     MobilePhone = e.MobileNumber,

@@ -24,13 +24,13 @@
               <Width>0.82099in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.78974in</Width>
+              <Width>0.86268in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.72724in</Width>
+              <Width>0.75846in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.77932in</Width>
+              <Width>1.19599in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.2064in</Width>
@@ -1121,14 +1121,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="EmployeeDeliverFromId">
+                    <Textbox Name="EmployeeDeliverFromMobile">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!EmployeeDeliverFromId.Value</Value>
+                              <Value>=Fields!EmployeeDeliverFromMobile.Value</Value>
                               <Style>
                                 <FontSize>11pt</FontSize>
                               </Style>
@@ -1139,7 +1139,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>EmployeeDeliverFromId</rd:DefaultName>
+                      <rd:DefaultName>EmployeeDeliverFromMobile</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>Gray</Color>
@@ -1337,14 +1337,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="EmployeeDeliverToId">
+                    <Textbox Name="EmployeeDeliverToMobile">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!EmployeeDeliverToId.Value</Value>
+                              <Value>=Fields!EmployeeDeliverToMobile.Value</Value>
                               <Style>
                                 <FontSize>11pt</FontSize>
                               </Style>
@@ -1355,7 +1355,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>EmployeeDeliverToId</rd:DefaultName>
+                      <rd:DefaultName>EmployeeDeliverToMobile</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>Gray</Color>
@@ -1803,10 +1803,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>DataSet1</DataSetName>
-        <Top>0.41542in</Top>
-        <Left>0.11458in</Left>
+        <Top>0.62375in</Top>
+        <Left>0.125in</Left>
         <Height>0.76043in</Height>
-        <Width>10.9209in</Width>
+        <Width>11.44173in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1833,7 +1833,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>0.02778in</Top>
+        <Top>0.25695in</Top>
         <Left>4.19667in</Left>
         <Height>0.25in</Height>
         <Width>3.11458in</Width>
@@ -1849,10 +1849,10 @@
         </Style>
       </Textbox>
     </ReportItems>
-    <Height>1.24876in</Height>
+    <Height>1.46751in</Height>
     <Style />
   </Body>
-  <Width>11.15006in</Width>
+  <Width>11.56673in</Width>
   <Page>
     <PageHeader>
       <Height>0.93528in</Height>
@@ -1863,8 +1863,8 @@
           <Source>Embedded</Source>
           <Value>القليوبية</Value>
           <Sizing>FitProportional</Sizing>
-          <Top>0.02778in</Top>
-          <Left>10.37296in</Left>
+          <Top>0.23486in</Top>
+          <Left>10.41462in</Left>
           <Height>0.52903in</Height>
           <Width>0.6625in</Width>
           <Style>
@@ -1942,8 +1942,8 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
-          <Top>0.09028in</Top>
-          <Left>8.20976in</Left>
+          <Top>0.23486in</Top>
+          <Left>8.22365in</Left>
           <Height>0.25in</Height>
           <Width>2.13542in</Width>
           <ZIndex>1</ZIndex>
@@ -1989,12 +1989,12 @@
           <DataField>SerialNumber</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="Type">
-          <DataField>Type</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
         <Field Name="Model">
           <DataField>Model</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Type">
+          <DataField>Type</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="ExportNumber">
@@ -2003,22 +2003,14 @@
         </Field>
         <Field Name="IsNew">
           <DataField>IsNew</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="Note">
           <DataField>Note</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="DelivaryDate">
-          <DataField>DelivaryDate</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
         <Field Name="EmpDelivarName">
           <DataField>EmpDelivarName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="EmployeeDeliverToId">
-          <DataField>EmployeeDeliverToId</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="BranchDelivar">
@@ -2033,16 +2025,24 @@
           <DataField>EmpOwnerName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="EmployeeDeliverFromId">
-          <DataField>EmployeeDeliverFromId</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
         <Field Name="BranchOwner">
           <DataField>BranchOwner</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="DepartmentOwner">
           <DataField>DepartmentOwner</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="EmployeeDeliverToMobile">
+          <DataField>EmployeeDeliverToMobile</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="EmployeeDeliverFromMobile">
+          <DataField>EmployeeDeliverFromMobile</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DelivaryDate">
+          <DataField>DelivaryDate</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>

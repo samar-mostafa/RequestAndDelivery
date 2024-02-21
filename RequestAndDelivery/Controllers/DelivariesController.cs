@@ -45,10 +45,12 @@ namespace RequestAndDelivery.Controllers
                 IsNew = d.Device.IsNew,
                 Note=d.Note,
                 ExportNumber = d.Request.ExportNumber,
-                EmployeeDeliverToId = d.Device.EmployeeDeliverTo.MobileNumber,
-                EmployeeDeliverFromId = d.Device.EmployeeDeliverFrom.MobileNumber,
+                EmployeeDeliverToMobile = d.Device.EmployeeDeliverTo.MobileNumber,
+                EmployeeDeliverFromMobile = d.Device.EmployeeDeliverFrom.MobileNumber,
+                EmployeeDeliverToId = d.Device.EmployeeDeliverToId,
+                EmployeeDeliverFromId = d.Device.EmployeeDeliverFromId,
 
-            }).ToList();
+                }).ToList();
             return View(data);
         }
 
@@ -163,6 +165,8 @@ namespace RequestAndDelivery.Controllers
                 (d.DelivaryDate <= mdl.DateTo || mdl.DateFrom == null) &&
                 (d.Device.EmployeeDeliverTo.MobileNumber == mdl.EmployeeId ||
                 d.Device.EmployeeDeliverFrom.MobileNumber == mdl.EmployeeId || mdl.EmployeeId == null) &&
+                (d.Device.EmployeeDeliverTo.Name == mdl.EmployeeName ||
+                d.Device.EmployeeDeliverFrom.Name == mdl.EmployeeName || mdl.EmployeeName == null) &&
                 (d.Device.EmployeeDeliverFrom.BranchId == mdl.BranchId ||
                 d.Device.EmployeeDeliverTo.BranchId == mdl.BranchId || mdl.BranchId == null) &&
                (d.Device.EmployeeDeliverFrom.DepartmentId == mdl.DepartmentId ||
@@ -250,6 +254,8 @@ namespace RequestAndDelivery.Controllers
             (d.DelivaryDate <= mdl.DateTo || mdl.DateFrom == null) &&
                 (d.Device.EmployeeDeliverTo.MobileNumber == mdl.EmployeeId ||
             d.Device.EmployeeDeliverFrom.MobileNumber == mdl.EmployeeId || mdl.EmployeeId == null) &&
+            (d.Device.EmployeeDeliverTo.Name == mdl.EmployeeName ||
+            d.Device.EmployeeDeliverFrom.Name == mdl.EmployeeName || mdl.EmployeeName == null )&&
             (d.Device.EmployeeDeliverFrom.BranchId == mdl.BranchId ||
             d.Device.EmployeeDeliverTo.BranchId == mdl.BranchId || mdl.BranchId == null) &&
             (d.Device.EmployeeDeliverFrom.DepartmentId == mdl.DepartmentId ||

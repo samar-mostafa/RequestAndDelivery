@@ -24,7 +24,7 @@ namespace RequestAndDelivery.Data.ViewModels
 
         public string EmployeeDeliverToName { get; set; }
 
-        [RegularExpression("^01[0,1,2,5]{1}[0-9]{8}$", ErrorMessage = "رقم التليفون غير صحيح")]
+        [RegularExpression("^01[0,1,2,5,6]{1}[0-9]{8}$", ErrorMessage = "رقم التليفون غير صحيح")]
         public string EmployeeDeliverToId { get; set; }
 
         public string Note { get; set; }

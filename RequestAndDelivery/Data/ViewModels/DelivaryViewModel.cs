@@ -9,8 +9,10 @@
         public bool IsNew { get; set; }
         public string  Note { get; set; }
         public string DelivaryDate { get; set; }
-        public string EmployeeDeliverToId { get; set; }
-        public string EmployeeDeliverFromId { get; set; }
+        public string EmployeeDeliverToMobile { get; set; }
+        public string EmployeeDeliverFromMobile { get; set; }
+        public int EmployeeDeliverToId { get; set; }
+        public int? EmployeeDeliverFromId { get; set; }
     }
 
     public class FilteredDeliveriesViewModel : DelivaryViewModel

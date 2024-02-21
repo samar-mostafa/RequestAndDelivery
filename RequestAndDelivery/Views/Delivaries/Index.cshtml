@@ -66,7 +66,7 @@
                                 }
                                 <td>@item.Note</td>
                                 <td>@item.DelivaryDate</td>
-                                <td>@item.EmployeeDeliverToId</td>
+                                <td>@item.EmployeeDeliverToMobile</td>
 
                                 <td>
                                     <a id="btn" href="javascript:;" class=" btn btn-outline-info js-model-render"
@@ -122,7 +122,7 @@
         $(document).ready(function () {
             var buttonCommon = {
                 exportOptions: {
-                    columns: [0, 1, 2, 3, 4,5,6],
+                    columns: [6,5,4,3,2,1,0],
                     format: {
                         body: function (data, row, column, node) {
                             return data;
@@ -133,22 +133,24 @@
             $("#delivaryTable").DataTable({
                 dom: 'Bfrtip',
                 "processing":true,
-                "stateSave":true,
                 buttons: [
                     $.extend(true, {}, buttonCommon, {
                         extend: 'excel',
                         text: 'excel',
-                        title: 'Delivaries',
+                       
                     }),
                     $.extend(true, {}, buttonCommon, {
                         extend: 'copy',
                         text: 'copy',
-                        title: 'Delivaries',
+                     
                     }),
                     $.extend(true, {}, buttonCommon, {
                         extend: 'print',
-                        messageTop:'<h1>الطلبات المنفذه</h1>',
+                        title: 'الطلبات المنفذه',
                         customize: function (win) {
+                            $(win.document.body).prepend('<h4 Class="mx-5" dir="rtl">إداره تكنولوجيا المعلومات</h4>');
+                            $(win.document.body).prepend('<h4 Class="mx-5" dir="rtl">قطاع التخطيط والتطوير</h4>');
+                            $(win.document.body).prepend('<h5 dir="rtl">شركه مياه الشرب والصرف الصحي بالقليوبيه</h5>');
                             $(win.document.body).find('table').addClass('display').css('font-size', '20px');
                             $(win.document.body).find('tr:nth-child(odd) td').each(function (index) {
                                 $(this).css('background-color', '#D0D0D0');
